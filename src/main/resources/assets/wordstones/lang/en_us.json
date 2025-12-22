@@ -8,5 +8,12 @@
 	"dimension.minecraft.the_nether": "The Nether",
 	"dimension.minecraft.the_end": "The End",
 
-	"item.nucleus.bound_location": "%s (%d, %d, %d)"
+	"item.euclids_elements.bound_location": "%s (%s, %s, %s)",
+	"gui.location": "%s, %s, %s in %s",
+	"commands.wordstone.list.entry": "%s at %s",
+	"commands.wordstone.list.empty": "There are no Global Wordstones",
+	"commands.wordstone.list": "There are Wordstones at the following locations:",
+	"message.wordstones.word_exists": "A Wordstone with that Word already exists",
+	"argument.word.invalid": "Word must be exactly 4 letters long",
+	"commands.wordstone.teleport.success": "Teleported %s to Wordstone %s"
 }

@@ -17,7 +17,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.solstice.euclidsElements.util.Location;
-import org.solstice.wordstones.registry.WordstoneComponentTypes;
+import org.sindercube.wordstones.registry.WordstoneComponentTypes;
 
 import java.util.List;
 
