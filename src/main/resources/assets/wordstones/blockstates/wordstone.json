@@ -1,0 +1,31 @@
+{
+	"variants": {
+		"facing=east,half=lower": {
+			"model": "wordstones:block/wordstone",
+			"y": 90
+		},
+		"facing=north,half=lower": {
+			"model": "wordstones:block/wordstone"
+		},
+		"facing=south,half=lower": {
+			"model": "wordstones:block/wordstone",
+			"y": 180
+		},
+		"facing=west,half=lower": {
+			"model": "wordstones:block/wordstone",
+			"y": 270
+		},
+		"facing=east,half=upper": {
+			"model": "wordstones:block/empty"
+		},
+		"facing=north,half=upper": {
+			"model": "wordstones:block/empty"
+		},
+		"facing=south,half=upper": {
+			"model": "wordstones:block/empty"
+		},
+		"facing=west,half=upper": {
+			"model": "wordstones:block/empty"
+		}
+	}
+}

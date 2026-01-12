@@ -13,9 +13,10 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import org.solstice.euclidsElements.util.Location;
-import org.sindercube.wordstones.content.GlobalWordstones;
+import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
+import org.sindercube.wordstones.util.Location;
 import org.sindercube.wordstones.content.Word;
+import org.sindercube.wordstones.content.state.GlobalWordstoneManager;
 
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class WordstoneCommand {
 
 	private static int executeList(CommandContext<ServerCommandSource> context) {
 		ServerWorld world = context.getSource().getWorld();
-		Map<Word, Location> wordstones = GlobalWordstones.getGlobalWordstones(world);
+		Map<Word, Location> wordstones = GlobalWordstoneManager.get(world).getData();
 		if (wordstones.isEmpty()) {
 			Text message = Text.translatable("commands.wordstone.list.empty");
 			context.getSource().sendFeedback(() -> message, true);
@@ -67,11 +68,11 @@ public class WordstoneCommand {
 		ServerWorld world = context.getSource().getWorld();
 		PlayerEntity target = EntityArgumentType.getPlayer(context, "target");
 		Word word = WordArgumentType.getWord(context, "word");
-		if (!GlobalWordstones.wordExists(world, word)) {
+		if (!GlobalWordstoneManager.get(world).getData().containsKey(word)) {
 			context.getSource().sendFeedback(() -> Text.translatable("commands.wordstone.teleport.error.no_wordstone"), true);
 			return 0;
 		}
-		GlobalWordstones.teleportToWordstone(target, word);
+		WordstoneEntity.teleportToWordstone(world, target, word);
 		context.getSource().sendFeedback(() -> Text.translatable("commands.wordstone.teleport.success", Text.literal(word.value())), true);
 		return 1;
 	}

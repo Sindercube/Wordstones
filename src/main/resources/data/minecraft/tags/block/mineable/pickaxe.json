@@ -1,6 +1,8 @@
 {
 	"values": [
 		"wordstones:wordstone",
-		"wordstones:drop_box"
+		"wordstones:drop_box",
+		"wordstones:stone_stele",
+		"wordstones:deepslate_stele"
 	]
 }

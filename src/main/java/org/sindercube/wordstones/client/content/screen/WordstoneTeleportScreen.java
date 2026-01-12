@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.text.Text;
 import org.sindercube.wordstones.content.Word;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
-import org.sindercube.wordstones.content.packet.TeleportToWordstoneC2SPacket;
+import org.sindercube.wordstones.content.packet.WordstoneTeleportC2SPacket;
 
 public class WordstoneTeleportScreen extends AbstractWordstoneScreen {
 
@@ -16,7 +16,7 @@ public class WordstoneTeleportScreen extends AbstractWordstoneScreen {
 	public void onDone() {
 		if (this.word.length() != 4) return;
 
-		ClientPlayNetworking.send(new TeleportToWordstoneC2SPacket(this.wordstone.getPos(), new Word(this.word)));
+		ClientPlayNetworking.send(new WordstoneTeleportC2SPacket(this.wordstone.getPos(), new Word(this.word)));
 		this.close();
 	}
 

@@ -1,9 +1,11 @@
 package org.sindercube.wordstones.content.block;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -19,6 +21,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
+import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
+import org.sindercube.wordstones.content.packet.WordstoneEditS2CPacket;
+import org.sindercube.wordstones.content.packet.WordstoneTeleportS2CPacket;
 
 public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
@@ -26,11 +31,10 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 	public static final EnumProperty<DoubleBlockHalf> HALF = Properties.DOUBLE_BLOCK_HALF;
 
 	public static final VoxelShape
-		BOTTOM_MODEL = Block.createCuboidShape(0, 0, 0, 16, 4, 16),
-		BASE_MODEL = Block.createCuboidShape(2, 4, 2, 14, 26, 14),
-		TOP_MODEL = Block.createCuboidShape(0, 26, 0, 16, 30, 16),
-		CAP_MODEL = Block.createCuboidShape(2, 30, 2, 14, 32, 14),
-		MODEL = VoxelShapes.union(BOTTOM_MODEL, BASE_MODEL, TOP_MODEL, CAP_MODEL);
+		BOTTOM_MODEL = Block.createCuboidShape(0, 0, 0, 16, 8, 16),
+		BASE_MODEL = Block.createCuboidShape(2, 8, 2, 14, 24, 14),
+		TOP_MODEL = Block.createCuboidShape(0, 24, 0, 16, 32, 16),
+		MODEL = VoxelShapes.union(BOTTOM_MODEL, BASE_MODEL, TOP_MODEL);
 
 	public AbstractWordstoneBlock(Settings settings) {
 		super(settings);
@@ -43,6 +47,16 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(FACING, HALF);
+	}
+
+	public void openEditScreen(PlayerEntity player, WordstoneEntity entity) {
+		if (!(player instanceof ServerPlayerEntity serverPlayer)) return;
+		ServerPlayNetworking.send(serverPlayer, new WordstoneEditS2CPacket(entity.getPos()));
+	}
+
+	public void openTeleportScreen(PlayerEntity player, WordstoneEntity entity) {
+		if (!(player instanceof ServerPlayerEntity serverPlayer)) return;
+		ServerPlayNetworking.send(serverPlayer, new WordstoneTeleportS2CPacket(entity.getPos()));
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
-import org.solstice.euclidsElements.client.EuclidsModelPredicateProviderRegistry;
 import org.sindercube.wordstones.client.registry.WordstoneEntityRenderers;
 import org.sindercube.wordstones.registry.WordstoneBlocks;
 import org.sindercube.wordstones.registry.WordstoneItems;
@@ -19,7 +18,7 @@ public class WordstonesClient implements ClientModInitializer {
 		WordstoneItems.clientInit();
 		WordstoneBlocks.clientInit();
 		WordstonePackets.clientInit();
-		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> EuclidsModelPredicateProviderRegistry.init());
+		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> ModelPredicateProviderRegistry.init());
 
 		WordstoneTypingEvent.WORD_TYPED.register(WordstonesClient::wordstoneEasterEggs);
 	}

@@ -9,24 +9,24 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
-import org.solstice.euclidsElements.EuclidsPlayerEvents;
+import org.sindercube.wordstones.util.ExtraPlayerEvents;
 import org.sindercube.wordstones.Wordstones;
-import org.solstice.euclidsElements.client.EuclidsModelPredicateProviderRegistry;
+import org.sindercube.wordstones.client.ModelPredicateProviderRegistry;
 import org.sindercube.wordstones.content.item.LastWillItem;
-import org.solstice.euclidsElements.content.item.LocationBindingItem;
+import org.sindercube.wordstones.content.item.LocationBindingItem;
 
 import java.util.function.Function;
 
 public class WordstoneItems {
 
 	public static void init() {
-		EuclidsPlayerEvents.BEFORE_DEATH.register(LastWillItem::beforeDeath);
+		ExtraPlayerEvents.BEFORE_DEATH.register(LastWillItem::beforeDeath);
 	}
 
 	@Deprecated
 	@Environment(EnvType.CLIENT)
 	public static void clientInit() {
-		EuclidsModelPredicateProviderRegistry.register(
+		ModelPredicateProviderRegistry.register(
 			LocationBindingItem.class,
 			Wordstones.of("bound_location"),
 			LocationBindingItem::getLocationPredicate

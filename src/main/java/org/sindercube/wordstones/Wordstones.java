@@ -19,7 +19,6 @@ public class Wordstones implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		WordstoneComponentTypes.init();
-		WordstoneAttachmentTypes.init();
 
 		WordstoneBlocks.init();
 		WordstoneItems.init();

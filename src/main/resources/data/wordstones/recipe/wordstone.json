@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+
+	"key": {
+		"#": { "item": "minecraft:stone_bricks" },
+		"B": { "item": "minecraft:bookshelf" },
+		"I": { "item": "wordstones:knowledge_fragment" }
+	},
+	"pattern": [
+		" # ",
+		"BIB",
+		"###"
+	],
+
+	"result": {
+		"id": "wordstones:wordstone"
+	}
+}

@@ -7,6 +7,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.content.block.entity.DropBoxEntity;
+import org.sindercube.wordstones.content.block.entity.SteleEntity;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
 
 public class WordstoneBlockEntityTypes {
@@ -18,6 +19,9 @@ public class WordstoneBlockEntityTypes {
 	);
 	public static final BlockEntityType<DropBoxEntity> DROP_BOX = register("drop_box",
 		BlockEntityType.Builder.create(DropBoxEntity::new, WordstoneBlocks.DROP_BOX)
+	);
+	public static final BlockEntityType<SteleEntity> STELE = register("stele",
+		BlockEntityType.Builder.create(SteleEntity::new, WordstoneBlocks.STONE_STELE, WordstoneBlocks.DEEPSLATE_STELE)
 	);
 
 	public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType.Builder<T> builder) {

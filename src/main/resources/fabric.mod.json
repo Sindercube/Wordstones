@@ -16,8 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [ "org.sindercube.wordstones.Wordstones" ],
-		"client": [ "org.sindercube.wordstones.client.WordstonesClient" ],
-		"fabric-datagen": [ "org.sindercube.wordstones.datagen.WordstonesDataGenerator" ]
+		"client": [ "org.sindercube.wordstones.client.WordstonesClient" ]
 	},
 	"mixins": [ "wordstones.mixins.json" ],
 	"accessWidener": "wordstones.accesswidener",
@@ -29,12 +28,10 @@
 
 	"depends": {
 		"minecraft": "*",
-		"fabric-api": "*",
-		"euclids_elements": "*"
+		"fabric-api": "*"
 	},
 	"suggests": {
 		"minecraft": "~${minecraft_version}",
-		"fabric-api": "~${fabric_version}",
-		"euclids_elements": "~${euclids_elements_version}"
+		"fabric-api": "~${fabric_version}"
 	}
 }

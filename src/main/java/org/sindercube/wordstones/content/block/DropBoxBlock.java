@@ -44,7 +44,6 @@ public class DropBoxBlock extends BlockWithEntity {
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		super.appendProperties(builder);
 		builder.add(FACING);
 	}
 

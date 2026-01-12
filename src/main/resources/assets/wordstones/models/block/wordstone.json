@@ -1,8 +1,8 @@
 {
-	"format_version": "1.21.6",
 	"texture_size": [64, 64],
 	"textures": {
-		"1": "wordstones:block/wordstone"
+		"1": "wordstones:block/wordstone",
+		"particle": "minecraft:block/lodestone_top"
 	},
 	"elements": [
 		{
@@ -83,8 +83,8 @@
 		},
 		"gui": {
 			"rotation": [30, -135, 0],
-			"translation": [0, -2.65, 0],
-			"scale": [0.42, 0.42, 0.42]
+			"translation": [0, -2.75, 0],
+			"scale": [0.4, 0.4, 0.4]
 		},
 		"head": {
 			"scale": [0.801, 0.801, 0.801]

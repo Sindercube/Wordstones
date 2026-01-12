@@ -1,7 +1,17 @@
 accessWidener v2 named
 
 accessible field net/minecraft/entity/player/PlayerInventory combinedInventory Ljava/util/List;
-accessible method net/minecraft/entity/player/PlayerEntity dropInventory ()V
 accessible method net/minecraft/block/TallPlantBlock onBreakInCreative (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V
-
 accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
+
+accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen messages [Ljava/lang/String;
+mutable field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen messages [Ljava/lang/String;
+accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen text Lnet/minecraft/block/entity/SignText;
+accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen currentRow I
+accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen selectionManager Lnet/minecraft/client/util/SelectionManager;
+accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen blockEntity Lnet/minecraft/block/entity/SignBlockEntity;
+accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen front Z
+accessible method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen finishEditing ()V
+accessible method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen setCurrentRowMessage (Ljava/lang/String;)V
+accessible method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen renderSignText (Lnet/minecraft/client/gui/DrawContext;)V
+extendable method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen renderSignText (Lnet/minecraft/client/gui/DrawContext;)V

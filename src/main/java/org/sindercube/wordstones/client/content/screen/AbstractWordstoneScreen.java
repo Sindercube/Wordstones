@@ -6,15 +6,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.entity.EnchantingTableBlockEntityRenderer;
 import net.minecraft.client.render.entity.model.BookModel;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -22,8 +20,6 @@ import org.sindercube.wordstones.client.WordstoneTypingEvent;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
 
 public abstract class AbstractWordstoneScreen extends Screen {
-
-	public static final Identifier BOOK_TEXTURE = Identifier.ofVanilla("textures/entity/enchanting_table_book.png");
 
 	protected final WordstoneEntity wordstone;
 	protected String word;
@@ -37,6 +33,12 @@ public abstract class AbstractWordstoneScreen extends Screen {
 		this.word = wordstone.getWord() != null ? wordstone.getWord().value() : "";
 	}
 
+	abstract public void onDone();
+
+	protected void onDone(ButtonWidget button) {
+		this.onDone();
+	}
+
 	@Override
 	protected void init() {
 		super.init();
@@ -45,7 +47,7 @@ public abstract class AbstractWordstoneScreen extends Screen {
 			.dimensions(this.width / 2 - 100, this.height / 4 + 144, 200, 20)
 			.build();
 		this.addDrawableChild(this.doneButton);
-		this.updateButtons();
+		this.update();
 
 		MinecraftClient client = this.client;
 		if (client != null) this.bookModel = new BookModel(client.getEntityModelLoader().getModelPart(EntityModelLayers.BOOK));
@@ -65,67 +67,54 @@ public abstract class AbstractWordstoneScreen extends Screen {
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		super.render(context, mouseX, mouseY, delta);
-
-		int centerX = this.width / 2;
-		int centerY = this.height / 2;
+		if (this.bookModel == null) return;
 
 		DiffuseLighting.disableGuiDepthLighting();
 		context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 40, 0xFFFFFF);
 
-		MatrixStack matrices = context.getMatrices();
-		VertexConsumerProvider vertexConsumers = context.getVertexConsumers();
-
-		this.drawBook(matrices, vertexConsumers, context, centerX, centerY);
-		this.drawText(matrices, context, centerX, centerY);
+		context.getMatrices().push();
+		this.translateForRender(context);
+		context.getMatrices().push();
+		this.renderBook(context);
+		context.getMatrices().pop();
+		this.renderText(context);
+		context.getMatrices().pop();
 
 		DiffuseLighting.enableGuiDepthLighting();
 	}
 
-	public void drawBook(MatrixStack matrices, VertexConsumerProvider vertexConsumers, DrawContext context, int x, int y) {
-		if (this.bookModel == null) return;
-
-		matrices.push();
-		matrices.translate((float)x, (float)y, -1024);
-
-		float scale = 128F;
-		matrices.scale(-scale, scale, scale);
-
-		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(45));
-		matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(90));
-		float leftFlipAmount = MathHelper.clamp(MathHelper.fractionalPart(1 + 0.25F) * 1.6F - 0.3F, 0.0F, 1.0F);
-		float rightFlipAmount = MathHelper.clamp(MathHelper.fractionalPart(1 + 0.75F) * 1.6F - 0.3F, 0.0F, 1.0F);
-		this.bookModel.setPageAngles(0, leftFlipAmount, rightFlipAmount, 1);
-		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.bookModel.getLayer(BOOK_TEXTURE));
-		this.bookModel.render(matrices, vertexConsumer, 0xF000F0, OverlayTexture.DEFAULT_UV);
-		context.draw();
-		matrices.pop();
+	public void translateForRender(DrawContext context) {
+		context.getMatrices().translate((float) this.width / 2, 120, 50);
 	}
 
-	public void drawText(MatrixStack matrices, DrawContext context, int centerX, int centerY) {
-		matrices.push();
-		matrices.translate(-centerX, -centerY, 0);
-		matrices.scale(2, 2, 1);
+	public void renderBook(DrawContext context) {
+		context.getMatrices().scale(-128, 128, 128);
+		context.getMatrices().multiply(RotationAxis.POSITIVE_X.rotationDegrees(45));
+		context.getMatrices().multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(90));
+
+		this.bookModel.setPageAngles(0, 0.099F, 0.9F, 1);
+		VertexConsumer vertexConsumer = EnchantingTableBlockEntityRenderer.BOOK_TEXTURE.getVertexConsumer(context.getVertexConsumers(), RenderLayer::getEntitySolid);
+		this.bookModel.render(context.getMatrices(), vertexConsumer, 0xF000F0, OverlayTexture.DEFAULT_UV);
+	}
+
+	public void renderText(DrawContext context) {
+		context.getMatrices().translate(-24, -20, 60);
+		context.getMatrices().scale(2.5F, 2.5F, 1);
 
 		String word = this.word;
-		int missing = Math.max(0, 4 - word.length());
-		word += "_".repeat(missing);
-
-		int textX = centerX - 10;
-		int textY = centerY - 10;
+		word += "_".repeat(Math.max(0, 4 - word.length()));
 
 		int spacing = 0;
 		for (String letter : word.split("")) {
-			int letterX = textX + spacing - textRenderer.getWidth(letter) / 2;
-			context.drawText(this.textRenderer, letter, letterX, textY, 0x000000, false);
+			int x = spacing - textRenderer.getWidth(letter) / 2;
+			context.drawText(this.textRenderer, letter, x, 0, 0x000000, false);
 			spacing += 7;
 		}
-
-		matrices.pop();
 	}
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		boolean result = switch (keyCode) {
+		return switch (keyCode) {
 			case GLFW.GLFW_KEY_ESCAPE -> {
 				this.close();
 				yield true;
@@ -138,13 +127,11 @@ public abstract class AbstractWordstoneScreen extends Screen {
 				if (this.word.isEmpty()) yield true;
 
 				this.word = this.word.substring(0, this.word.length() - 1);
-				this.updateButtons();
+				this.update();
 				yield true;
 			}
 			default -> super.keyPressed(keyCode, scanCode, modifiers);
 		};
-
-		return result;
 	}
 
 	@Override
@@ -154,7 +141,7 @@ public abstract class AbstractWordstoneScreen extends Screen {
 
 		letter = Character.toUpperCase(letter);
 		this.word += letter;
-		this.updateButtons();
+		this.update();
 
 		MinecraftClient client = MinecraftClient.getInstance();
 		if (client != null) WordstoneTypingEvent.WORD_TYPED.invoker().wordTyped(client, this.word);
@@ -162,15 +149,8 @@ public abstract class AbstractWordstoneScreen extends Screen {
 		return true;
 	}
 
-	protected void updateButtons() {
-		if (this.doneButton != null)
-			this.doneButton.active = this.word.length() == 4;
-	}
-
-	abstract public void onDone();
-
-	protected void onDone(ButtonWidget button) {
-		this.onDone();
+	protected void update() {
+		if (this.doneButton != null) this.doneButton.active = this.word.length() == 4;
 	}
 
 	@Override

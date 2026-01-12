@@ -10,18 +10,22 @@ import org.sindercube.wordstones.content.packet.*;
 public class WordstonePackets {
 
 	public static void init() {
-		PayloadTypeRegistry.playS2C().register(EditWordstoneS2CPacket.ID, EditWordstoneS2CPacket.CODEC);
-		PayloadTypeRegistry.playC2S().register(EditWordstoneC2SPacket.ID, EditWordstoneC2SPacket.CODEC);
-		PayloadTypeRegistry.playS2C().register(TeleportToWordstoneS2CPacket.ID, TeleportToWordstoneS2CPacket.CODEC);
-		PayloadTypeRegistry.playC2S().register(TeleportToWordstoneC2SPacket.ID, TeleportToWordstoneC2SPacket.CODEC);
+		PayloadTypeRegistry.playC2S().register(WordstoneEditC2SPacket.ID, WordstoneEditC2SPacket.CODEC);
+		PayloadTypeRegistry.playC2S().register(WordstoneTeleportC2SPacket.ID, WordstoneTeleportC2SPacket.CODEC);
+
+		PayloadTypeRegistry.playS2C().register(WordstoneEditS2CPacket.ID, WordstoneEditS2CPacket.CODEC);
+		PayloadTypeRegistry.playS2C().register(WordstoneTeleportS2CPacket.ID, WordstoneTeleportS2CPacket.CODEC);
+		PayloadTypeRegistry.playS2C().register(SteleEditS2CPacket.ID, SteleEditS2CPacket.CODEC);
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void clientInit() {
-		ClientPlayNetworking.registerGlobalReceiver(EditWordstoneS2CPacket.ID, EditWordstoneS2CPacket::handle);
-		ServerPlayNetworking.registerGlobalReceiver(EditWordstoneC2SPacket.ID, EditWordstoneC2SPacket::handle);
-		ClientPlayNetworking.registerGlobalReceiver(TeleportToWordstoneS2CPacket.ID, TeleportToWordstoneS2CPacket::handle);
-		ServerPlayNetworking.registerGlobalReceiver(TeleportToWordstoneC2SPacket.ID, TeleportToWordstoneC2SPacket::handle);
+		ServerPlayNetworking.registerGlobalReceiver(WordstoneEditC2SPacket.ID, WordstoneEditC2SPacket::handle);
+		ServerPlayNetworking.registerGlobalReceiver(WordstoneTeleportC2SPacket.ID, WordstoneTeleportC2SPacket::handle);
+
+		ClientPlayNetworking.registerGlobalReceiver(WordstoneEditS2CPacket.ID, WordstoneEditS2CPacket::handle);
+		ClientPlayNetworking.registerGlobalReceiver(WordstoneTeleportS2CPacket.ID, WordstoneTeleportS2CPacket::handle);
+		ClientPlayNetworking.registerGlobalReceiver(SteleEditS2CPacket.ID, SteleEditS2CPacket::handle);
 	}
 
 }

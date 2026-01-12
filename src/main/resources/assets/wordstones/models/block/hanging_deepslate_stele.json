@@ -1,0 +1,7 @@
+{
+	"parent": "wordstones:block/template/hanging_stele",
+	"textures": {
+		"cube": "wordstones:block/deepslate_stele",
+		"particle": "minecraft:block/polished_deepslate"
+	}
+}

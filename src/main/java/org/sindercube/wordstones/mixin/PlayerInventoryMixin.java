@@ -25,7 +25,7 @@ public class PlayerInventoryMixin implements WordstonesPlayerInventory {
 	)
 	public DynamicRegistryManager changeRegistryLookup(PlayerEntity player, Operation<DynamicRegistryManager> original) {
 		if (player != null) return original.call(player);
-		return (DynamicRegistryManager)this.getRegistryLookup();
+		return (DynamicRegistryManager) this.getRegistryLookup();
 	}
 
 	@Override

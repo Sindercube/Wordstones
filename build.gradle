@@ -6,17 +6,8 @@ base.archivesName = project.mod_id
 version = project.mod_version
 group = project.mod_group
 
-repositories {
-	mavenLocal()
-	maven { url = "https://dl.cloudsmith.io/public/solstice-mc/artifacts/maven/" }
-}
-
 loom {
 	accessWidenerPath = file("src/main/resources/wordstones.accesswidener")
-}
-
-fabricApi {
-	configureDataGeneration()
 }
 
 dependencies {
@@ -24,7 +15,6 @@ dependencies {
 	mappings "net.fabricmc:yarn:$yarn_mappings:v2"
 	modImplementation "net.fabricmc:fabric-loader:$loader_version"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
-	modImplementation "org.solstice:euclids-elements:$euclids_elements_version"
 }
 
 processResources {

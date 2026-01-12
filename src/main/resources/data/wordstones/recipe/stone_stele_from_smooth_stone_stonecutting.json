@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:stonecutting",
+
+	"ingredient": {
+		"item": "minecraft:smooth_stone"
+	},
+
+	"result": {
+		"id": "wordstones:stone_stele"
+	}
+}

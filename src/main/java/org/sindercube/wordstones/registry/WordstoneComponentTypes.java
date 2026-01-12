@@ -8,7 +8,7 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import org.sindercube.wordstones.Wordstones;
-import org.solstice.euclidsElements.util.Location;
+import org.sindercube.wordstones.util.Location;
 
 public class WordstoneComponentTypes {
 

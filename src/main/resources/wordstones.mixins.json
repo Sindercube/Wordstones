@@ -4,8 +4,9 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"EyeOfEnderEntityMixin",
+		"PlayerInventoryMixin",
 		"ServerPlayerEntityMixin",
-		"PlayerInventoryMixin"
+		"ServerWorldMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -7,7 +7,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
-import org.solstice.euclidsElements.EuclidsPlayerEvents;
+import org.sindercube.wordstones.util.ExtraPlayerEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +23,7 @@ public abstract class ServerPlayerEntityMixin extends LivingEntity {
 	@Inject(method = "onDeath", at = @At("HEAD"))
 	public void beforeDeath(CallbackInfo info, @Local(argsOnly = true) DamageSource source) {
 		if (!this.isRemoved() && !this.dead)
-			EuclidsPlayerEvents.BEFORE_DEATH.invoker().afterDeath((PlayerEntity)(Object)this, source);
+			ExtraPlayerEvents.BEFORE_DEATH.invoker().afterDeath((PlayerEntity)(Object)this, source);
 	}
 
 }

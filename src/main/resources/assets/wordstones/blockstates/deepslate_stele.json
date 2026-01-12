@@ -1,0 +1,34 @@
+{
+	"variants": {
+		"facing=east,hanging=false": {
+			"model": "wordstones:block/deepslate_stele",
+			"y": 90
+		},
+		"facing=east,hanging=true": {
+			"model": "wordstones:block/hanging_deepslate_stele",
+			"y": 90
+		},
+		"facing=north,hanging=false": {
+			"model": "wordstones:block/deepslate_stele"
+		},
+		"facing=north,hanging=true": {
+			"model": "wordstones:block/hanging_deepslate_stele"
+		},
+		"facing=south,hanging=false": {
+			"model": "wordstones:block/deepslate_stele",
+			"y": 180
+		},
+		"facing=south,hanging=true": {
+			"model": "wordstones:block/hanging_deepslate_stele",
+			"y": 180
+		},
+		"facing=west,hanging=false": {
+			"model": "wordstones:block/deepslate_stele",
+			"y": 270
+		},
+		"facing=west,hanging=true": {
+			"model": "wordstones:block/hanging_deepslate_stele",
+			"y": 270
+		}
+	}
+}
