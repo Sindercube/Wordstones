@@ -19,10 +19,8 @@ public record WordstoneTeleportC2SPacket(BlockPos pos, Word word) implements Cus
 	public static final Id<WordstoneTeleportC2SPacket> ID = new Id<>(Wordstones.of("wordstone_teleport_c2s"));
 
 	public static final PacketCodec<RegistryByteBuf, WordstoneTeleportC2SPacket> CODEC = PacketCodec.tuple(
-		BlockPos.PACKET_CODEC,
-		WordstoneTeleportC2SPacket::pos,
-		Word.PACKET_CODEC,
-		WordstoneTeleportC2SPacket::word,
+		BlockPos.PACKET_CODEC, WordstoneTeleportC2SPacket::pos,
+		Word.PACKET_CODEC, WordstoneTeleportC2SPacket::word,
 		WordstoneTeleportC2SPacket::new
 	);
 

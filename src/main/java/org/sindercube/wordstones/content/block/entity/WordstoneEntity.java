@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -21,10 +22,10 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.sindercube.wordstones.content.Word;
 import org.sindercube.wordstones.content.block.WordstoneBlock;
-import org.sindercube.wordstones.util.Location;
 import org.sindercube.wordstones.content.state.GlobalWordstoneManager;
-import org.sindercube.wordstones.registry.WordstoneBlockEntityTypes;
-import org.sindercube.wordstones.registry.WordstoneTags;
+import org.sindercube.wordstones.registry.WordstonesBlockEntityTypes;
+import org.sindercube.wordstones.registry.WordstonesTags;
+import org.sindercube.wordstones.util.Location;
 
 public class WordstoneEntity extends BlockEntity {
 
@@ -34,7 +35,7 @@ public class WordstoneEntity extends BlockEntity {
 	public RenderState renderState = new RenderState();
 
 	public WordstoneEntity(BlockPos pos, BlockState state) {
-        super(WordstoneBlockEntityTypes.WORDSTONE, pos, state);
+        super(WordstonesBlockEntityTypes.WORDSTONE, pos, state);
     }
 
 	@Override
@@ -69,7 +70,6 @@ public class WordstoneEntity extends BlockEntity {
 	@Override
     public void markRemoved() {
 		if (this.world != null && this.world instanceof ServerWorld serverWorld && serverWorld.isChunkLoaded(this.pos)) {
-			System.out.println(this.removed);
 			GlobalWordstoneManager.get(serverWorld).remove(word);
 		}
 		super.markRemoved();
@@ -138,16 +138,21 @@ public class WordstoneEntity extends BlockEntity {
 
 	public static void teleportToWordstone(ServerWorld serverWorld, PlayerEntity player, Word word) {
 		Location location = GlobalWordstoneManager.get(serverWorld).getData().getOrDefault(word, Location.ZERO);
-		if (location.isZero()) return;
+		if (!location.isZero()) teleportToLocation(player, location);
+	}
 
-		World world = player.getWorld().getServer().getWorld(location.worldKey());
+	public static void teleportToLocation(PlayerEntity player, Location location) {
+		MinecraftServer server = player.getServer();
+		if (server == null) return;
+
+		World locationWorld = location.getDimension(server);
 		BlockPos pos = location.pos();
-		BlockState state = world.getBlockState(pos);
+		BlockState state = locationWorld.getBlockState(pos);
 		Direction direction = state.get(WordstoneBlock.FACING);
 		pos = pos.offset(direction, 2);
 
 //		player.setYaw(direction.asRotation());
-		dropItems(world, location.pos(), player);
+		dropItems(locationWorld, location.pos(), player);
 
 		Vec3d vec = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 		if (player.hasVehicle()) player.stopRiding();
@@ -155,7 +160,7 @@ public class WordstoneEntity extends BlockEntity {
 		player.setPitch(0);
 		player.requestTeleport(vec.x, vec.y, vec.z);
 
-		world.playSound(null, player.getX(), player.getY(), player.getZ(),
+		locationWorld.playSound(null, player.getX(), player.getY(), player.getZ(),
 			SoundEvents.ENTITY_ENDERMAN_TELEPORT,
 			SoundCategory.PLAYERS,
 			1, 1
@@ -182,7 +187,7 @@ public class WordstoneEntity extends BlockEntity {
 				player.getInventory().removeStack(i);
 				continue;
 			}
-			if (stack.isIn(WordstoneTags.KEPT_ACROSS_TELEPORTATION)) continue;
+			if (stack.isIn(WordstonesTags.KEPT_ACROSS_TELEPORTATION)) continue;
 			player.dropItem(stack, true, true);
 			player.getInventory().removeStack(i);
 		}

@@ -1,0 +1,32 @@
+{
+	"parent": "minecraft:recipes/root",
+	"criteria": {
+		"has_enchanted_quill": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "wordstones:enchanted_quill"
+					}
+				]
+			}
+		},
+		"has_the_recipe": {
+			"trigger": "minecraft:recipe_unlocked",
+			"conditions": {
+				"recipe": "wordstones:enchanted_tome"
+			}
+		}
+	},
+	"requirements": [
+		[
+			"has_the_recipe",
+			"has_enchanted_quill"
+		]
+	],
+	"rewards": {
+		"recipes": [
+			"minecraft:enchanting_table"
+		]
+	}
+}

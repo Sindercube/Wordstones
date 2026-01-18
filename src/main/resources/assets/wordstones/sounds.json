@@ -1,16 +1,74 @@
 {
+	"item.linked_tome.link": {
+		"sounds": [
+			{
+				"name": "block/chiseled_bookshelf/insert_enchanted1",
+				"volume": 0.8
+			},
+			{
+				"name": "block/chiseled_bookshelf/insert_enchanted2",
+				"volume": 0.8
+			},
+			{
+				"name": "block/chiseled_bookshelf/insert_enchanted3",
+				"volume": 0.8
+			},
+			{
+				"name": "block/chiseled_bookshelf/insert_enchanted4",
+				"volume": 0.8
+			}
+		],
+		"subtitle": "subtitle.item.linked_tome.link"
+	},
+	"item.enchanted_quill.use.sign": {
+		"sounds": [
+			"item/dye/dye",
+			{
+				"name": "item/dye/dye",
+				"pitch": 0.9
+			},
+			{
+				"name": "item/dye/dye",
+				"pitch": 0.95
+			},
+			{
+				"name": "item/dye/dye",
+				"pitch": 1.1
+			}
+		],
+		"subtitle": "subtitle.item.enchanted_quill.use.sign"
+	},
 	"block.drop_box.deposit": {
 		"sounds": [
 			{
 				"name": "random/pop",
 				"pitch": 0.75
+			},
+			{
+				"name": "random/pop",
+				"pitch": 0.7
+			},
+			{
+				"name": "random/pop",
+				"pitch": 0.6
 			}
 		],
 		"subtitle": "subtitle.block.drop_box.deposit"
 	},
 	"block.drop_box.retrieve": {
 		"sounds": [
-			"random/pop"
+			{
+				"name": "random/pop",
+				"pitch": 1
+			},
+			{
+				"name": "random/pop",
+				"pitch": 1.1
+			},
+			{
+				"name": "random/pop",
+				"pitch": 1.15
+			}
 		],
 		"subtitle": "subtitle.block.drop_box.retrieve"
 	}

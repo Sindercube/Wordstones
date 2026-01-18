@@ -16,8 +16,7 @@ public record WordstoneTeleportS2CPacket(BlockPos pos) implements CustomPayload 
 	public static final Id<WordstoneTeleportS2CPacket> ID = new Id<>(Wordstones.of("wordstone_teleport_s2c"));
 
 	public static final PacketCodec<RegistryByteBuf, WordstoneTeleportS2CPacket> CODEC = PacketCodec.tuple(
-		BlockPos.PACKET_CODEC,
-		WordstoneTeleportS2CPacket::pos,
+		BlockPos.PACKET_CODEC, WordstoneTeleportS2CPacket::pos,
 		WordstoneTeleportS2CPacket::new
 	);
 

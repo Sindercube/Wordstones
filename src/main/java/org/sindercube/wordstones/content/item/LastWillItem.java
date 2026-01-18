@@ -9,10 +9,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.sindercube.wordstones.util.Location;
 import org.sindercube.wordstones.content.block.DropBoxBlock;
 import org.sindercube.wordstones.content.block.entity.DropBoxEntity;
-import org.sindercube.wordstones.registry.WordstoneComponentTypes;
+import org.sindercube.wordstones.registry.WordstonesComponentTypes;
+import org.sindercube.wordstones.util.Location;
 
 public class LastWillItem extends LocationBindingItem {
 
@@ -44,10 +44,10 @@ public class LastWillItem extends LocationBindingItem {
 		ItemStack stack = getLastWillStack(player);
 		if (stack == null) return;
 
-		Location location = stack.getOrDefault(WordstoneComponentTypes.LOCATION, Location.ZERO);
+		Location location = stack.getOrDefault(WordstonesComponentTypes.LOCATION, Location.ZERO);
 		if (location.isZero()) return;
 
-		World world = server.getWorld(location.worldKey());
+		World world = server.getWorld(location.dimension());
 		if (world == null) return;
 
 		if (world.getBlockEntity(location.pos()) instanceof DropBoxEntity dropBox) {

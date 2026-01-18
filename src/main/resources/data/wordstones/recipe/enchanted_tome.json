@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+
+	"ingredients": [
+		{ "item": "wordstones:enchanted_quill" },
+		{ "item": "minecraft:book" }
+	],
+
+	"result": {
+		"id": "wordstones:enchanted_tome"
+	}
+}

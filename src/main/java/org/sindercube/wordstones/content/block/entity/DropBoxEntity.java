@@ -16,7 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import org.sindercube.wordstones.content.entity.WordstonesPlayerInventory;
-import org.sindercube.wordstones.registry.WordstoneBlockEntityTypes;
+import org.sindercube.wordstones.registry.WordstonesBlockEntityTypes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class DropBoxEntity extends BlockEntity {
 	protected Map<UUID, PlayerInventory> playerInventories = new HashMap<>();
 
 	public DropBoxEntity(BlockPos pos, BlockState state) {
-        super(WordstoneBlockEntityTypes.DROP_BOX, pos, state);
+        super(WordstonesBlockEntityTypes.DROP_BOX, pos, state);
     }
 
 	@Override

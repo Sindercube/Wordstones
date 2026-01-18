@@ -1,7 +1,8 @@
 package org.sindercube.wordstones.content.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -14,7 +15,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
-import org.sindercube.wordstones.registry.WordstoneBlockEntityTypes;
+import org.sindercube.wordstones.registry.WordstonesBlockEntityTypes;
 
 public class WordstoneBlock extends AbstractWordstoneBlock {
 
@@ -34,7 +35,8 @@ public class WordstoneBlock extends AbstractWordstoneBlock {
 	}
 
 	@Override
-	public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+	public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		super.onPlaced(world, pos, state, placer, stack);
 		if (!(placer instanceof PlayerEntity player)) return;
 		if (!(world.getBlockEntity(pos) instanceof WordstoneEntity wordstone)) return;
 
@@ -48,15 +50,18 @@ public class WordstoneBlock extends AbstractWordstoneBlock {
 		BlockPos entityPos = state.get(HALF) == DoubleBlockHalf.UPPER ? pos.down() : pos;
 		if (!(world.getBlockEntity(entityPos) instanceof WordstoneEntity wordstone)) return ActionResult.PASS;
 
-		if (wordstone.hasWord()) this.openTeleportScreen(player, wordstone);
-		else this.openEditScreen(player, wordstone);
+		if (wordstone.hasWord()) {
+			this.openTeleportScreen(player, wordstone);
+		} else {
+			this.openEditScreen(player, wordstone);
+		}
 
 		return ActionResult.SUCCESS;
 	}
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return world.isClient ? validateTicker(type, WordstoneBlockEntityTypes.WORDSTONE, WordstoneEntity::clientTick) : null;
+		return world.isClient ? validateTicker(type, WordstonesBlockEntityTypes.WORDSTONE, WordstoneEntity::clientTick) : null;
 	}
 
 }

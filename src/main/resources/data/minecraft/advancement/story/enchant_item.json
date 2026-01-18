@@ -1,0 +1,24 @@
+{
+	"parent": "minecraft:story/follow_ender_eye",
+	"criteria": {
+		"enchanted_item": {
+			"trigger": "minecraft:enchanted_item"
+		}
+	},
+	"display": {
+		"title": {
+			"translate": "advancements.story.enchant_item.title"
+		},
+		"description": {
+			"translate": "advancements.story.enchant_item.description"
+		},
+		"icon": {
+			"id": "minecraft:enchanted_book"
+		}
+	},
+	"requirements": [
+		[
+			"enchanted_item"
+		]
+	]
+}

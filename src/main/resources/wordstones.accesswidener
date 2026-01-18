@@ -15,3 +15,5 @@ accessible method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen 
 accessible method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen setCurrentRowMessage (Ljava/lang/String;)V
 accessible method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen renderSignText (Lnet/minecraft/client/gui/DrawContext;)V
 extendable method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen renderSignText (Lnet/minecraft/client/gui/DrawContext;)V
+
+accessible method net/minecraft/client/particle/SquidInkParticle <init> (Lnet/minecraft/client/world/ClientWorld;DDDDDDILnet/minecraft/client/particle/SpriteProvider;)V

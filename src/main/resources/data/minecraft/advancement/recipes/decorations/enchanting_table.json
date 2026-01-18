@@ -1,0 +1,52 @@
+{
+	"parent": "minecraft:recipes/root",
+	"criteria": {
+		"has_enchanted_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"predicates": {
+							"minecraft:enchantments": [
+								{
+									"levels": {
+										"min": 1
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		"has_enchanted_book": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"predicates": {
+							"minecraft:stored_enchantments": [
+								{
+									"levels": {
+										"min": 1
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"has_enchanted_item",
+			"has_enchanted_book"
+		]
+	],
+	"rewards": {
+		"recipes": [
+			"minecraft:enchanting_table"
+		]
+	}
+}

@@ -7,6 +7,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -15,19 +16,19 @@ import net.minecraft.world.World;
 
 public record Location (
 	BlockPos pos,
-	RegistryKey<World> worldKey
+	RegistryKey<World> dimension
 ) {
+
+	public static final PacketCodec<ByteBuf, RegistryKey<World>> DIMENSION_PACKET_CODEC = RegistryKey.createPacketCodec(RegistryKeys.WORLD);
 
 	public static final Codec<Location> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		BlockPos.CODEC.fieldOf("position").forGetter(Location::pos),
-		World.CODEC.fieldOf("world").forGetter(Location::worldKey)
+		World.CODEC.fieldOf("dimension").forGetter(Location::dimension)
 	).apply(instance, Location::new));
-
-	public static final PacketCodec<ByteBuf, RegistryKey<World>> WORLD_PACKET_CODEC = RegistryKey.createPacketCodec(RegistryKeys.WORLD);
 
 	public static final PacketCodec<RegistryByteBuf, Location> PACKET_CODEC = PacketCodec.tuple(
 		BlockPos.PACKET_CODEC, Location::pos,
-		WORLD_PACKET_CODEC, Location::worldKey,
+		DIMENSION_PACKET_CODEC, Location::dimension,
 		Location::new
 	);
 
@@ -37,23 +38,24 @@ public record Location (
 
 	public static final Location ZERO = new Location(
 		new BlockPos(0, 0, 0),
-		RegistryKey.of(RegistryKeys.WORLD, Identifier.ofVanilla("null"))
+		RegistryKey.of(RegistryKeys.WORLD, Identifier.of("null"))
 	);
 
 	public boolean isZero() {
 		return this.equals(ZERO);
 	}
 
-	public Vec3d getVec() {
+	public Vec3d getVec3d() {
 		return Vec3d.of(this.pos);
 	}
 
-	public String dimensionId() {
-		return this.worldKey.getValue().toTranslationKey("dimension");
+	public World getDimension(MinecraftServer server) {
+		return server.getWorld(this.dimension);
 	}
 
-	public Text dimensionName() {
-		return Text.translatable(dimensionId());
+	public Text getDimensionName() {
+		String key = this.dimension.getValue().toTranslationKey("dimension");
+		return Text.translatable(key);
 	}
 
 }

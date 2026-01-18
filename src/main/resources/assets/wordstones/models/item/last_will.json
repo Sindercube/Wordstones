@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "wordstones:item/last_will"
-  }
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "wordstones:item/last_will"
+	}
 }

@@ -14,10 +14,8 @@ public class WordstoneTeleportScreen extends AbstractWordstoneScreen {
 
 	@Override
 	public void onDone() {
-		if (this.word.length() != 4) return;
-
+		super.onDone();
 		ClientPlayNetworking.send(new WordstoneTeleportC2SPacket(this.wordstone.getPos(), new Word(this.word)));
-		this.close();
 	}
 
 }

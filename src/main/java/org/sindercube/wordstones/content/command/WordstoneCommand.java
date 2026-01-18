@@ -13,14 +13,15 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
-import org.sindercube.wordstones.util.Location;
 import org.sindercube.wordstones.content.Word;
+import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
 import org.sindercube.wordstones.content.state.GlobalWordstoneManager;
+import org.sindercube.wordstones.util.Location;
 
 import java.util.Map;
 
-import static net.minecraft.server.command.CommandManager.*;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
 
 public class WordstoneCommand {
 
@@ -55,7 +56,7 @@ public class WordstoneCommand {
 				Text.literal(String.valueOf(location.pos().getX())),
 				Text.literal(String.valueOf(location.pos().getY())),
 				Text.literal(String.valueOf(location.pos().getZ())),
-				location.dimensionName()
+				location.getDimensionName()
 			);
 			message.append(ScreenTexts.LINE_BREAK)
 				.append(Text.translatable("commands.wordstone.list.entry", Text.literal(word.value()), locationText));

@@ -16,8 +16,7 @@ public record WordstoneEditS2CPacket(BlockPos pos) implements CustomPayload {
 	public static final CustomPayload.Id<WordstoneEditS2CPacket> ID = new CustomPayload.Id<>(Wordstones.of("wordstone_edit_s2c"));
 
 	public static final PacketCodec<RegistryByteBuf, WordstoneEditS2CPacket> CODEC = PacketCodec.tuple(
-		BlockPos.PACKET_CODEC,
-		WordstoneEditS2CPacket::pos,
+		BlockPos.PACKET_CODEC, WordstoneEditS2CPacket::pos,
 		WordstoneEditS2CPacket::new
 	);
 

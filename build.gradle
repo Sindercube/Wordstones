@@ -1,5 +1,9 @@
 plugins {
-	id 'fabric-loom' version '1.10-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
+}
+
+repositories {
+	maven { url "https://api.modrinth.com/maven" }
 }
 
 base.archivesName = project.mod_id
@@ -15,6 +19,8 @@ dependencies {
 	mappings "net.fabricmc:yarn:$yarn_mappings:v2"
 	modImplementation "net.fabricmc:fabric-loader:$loader_version"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
+
+	modApi "maven.modrinth:emi:$emi_version+$minecraft_version+fabric"
 }
 
 processResources {

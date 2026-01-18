@@ -3,21 +3,24 @@ package org.sindercube.wordstones.registry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.item.Item;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
-import org.sindercube.wordstones.util.ExtraPlayerEvents;
 import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.client.ModelPredicateProviderRegistry;
+import org.sindercube.wordstones.content.item.EnchantedQuillItem;
+import org.sindercube.wordstones.content.item.EnchantedTomeItem;
 import org.sindercube.wordstones.content.item.LastWillItem;
 import org.sindercube.wordstones.content.item.LocationBindingItem;
+import org.sindercube.wordstones.util.ExtraPlayerEvents;
 
 import java.util.function.Function;
 
-public class WordstoneItems {
+public class WordstonesItems {
 
 	public static void init() {
 		ExtraPlayerEvents.BEFORE_DEATH.register(LastWillItem::beforeDeath);
@@ -33,13 +36,33 @@ public class WordstoneItems {
 		);
 	}
 
-	public static final Item KNOWLEDGE_FRAGMENT = register("knowledge_fragment");
+	public static final Item EMPTY_QUILL = register("empty_quill",
+		new Item.Settings()
+			.maxCount(1)
+	);
+
+	public static final Item ENCHANTED_QUILL = register("enchanted_quill",
+		EnchantedQuillItem::new,
+		new Item.Settings()
+			.maxCount(1)
+			.rarity(Rarity.RARE)
+			.maxDamage(8)
+	);
+
+	public static final Item ENCHANTED_TOME = register("enchanted_tome",
+		EnchantedTomeItem::new,
+		new Item.Settings()
+	);
 
 	public static final Item LAST_WILL = register("last_will",
 		LastWillItem::new,
 		new Item.Settings()
 			.maxCount(1)
 			.rarity(Rarity.RARE)
+	);
+
+	public static final Item ENCHANTED_SQUID_SPAWN_EGG = register("enchanted_squid_spawn_egg",
+		settings -> new SpawnEggItem(WordstonesEntityTypes.ENCHANTED_SQUID, 0xA5A5FF, 0x7132A1, settings)
 	);
 
 	public static Item register(String name) {

@@ -22,7 +22,7 @@ import org.sindercube.wordstones.content.block.WordstoneBlock;
 
 import java.util.function.Function;
 
-public class WordstoneBlocks {
+public class WordstonesBlocks {
 
 	public static void init() {}
 

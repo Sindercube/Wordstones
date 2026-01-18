@@ -30,10 +30,17 @@ public abstract class AbstractWordstoneScreen extends Screen {
 	public AbstractWordstoneScreen(Text title, WordstoneEntity wordstone) {
 		super(title);
 		this.wordstone = wordstone;
+		if (wordstone == null) {
+			this.word = "";
+			return;
+		}
+
 		this.word = wordstone.getWord() != null ? wordstone.getWord().value() : "";
 	}
 
-	abstract public void onDone();
+	public void onDone() {
+		this.close();
+	}
 
 	protected void onDone(ButtonWidget button) {
 		this.onDone();

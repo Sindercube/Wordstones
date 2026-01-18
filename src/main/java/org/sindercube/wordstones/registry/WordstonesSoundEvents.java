@@ -9,8 +9,11 @@ import org.sindercube.wordstones.Wordstones;
 
 public class WordstonesSoundEvents {
 
+
 	public static void init() {}
 
+	public static final SoundEvent ITEM_LINKED_TOME_LINK = register("item.linked_tome.link");
+	public static final SoundEvent ITEM_ENCHANTED_QUILL_USE_SIGN = register("item.enchanted_quill.use.sign");
 	public static final RegistryEntry<SoundEvent> DROP_BOX_DEPOSIT = registerReference("block.drop_box.deposit");
 	public static final RegistryEntry<SoundEvent> DROP_BOX_RETRIEVE = registerReference("block.drop_box.retrieve");
 

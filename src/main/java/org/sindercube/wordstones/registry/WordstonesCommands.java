@@ -7,7 +7,7 @@ import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.content.command.WordArgumentType;
 import org.sindercube.wordstones.content.command.WordstoneCommand;
 
-public class WordstoneCommands {
+public class WordstonesCommands {
 
 	public static void init() {
 		ArgumentTypeRegistry.registerArgumentType(

@@ -3,8 +3,10 @@ package org.sindercube.wordstones.content.block;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.DoubleBlockHalf;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -74,7 +76,12 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 		}
 	}
 
-	@Nullable
+	@Override
+	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+		world.setBlockState(pos.up(), this.getDefaultState().with(HALF, DoubleBlockHalf.UPPER));
+	}
+
+	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
 		BlockPos pos = context.getBlockPos();
 		World world = context.getWorld();
@@ -97,7 +104,7 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		if (!world.isClient && (player.isCreative() || !player.canHarvest(state))) {
+		if (!world.isClient && player.isCreative()) {
 			TallPlantBlock.onBreakInCreative(world, pos, state, player);
 		}
 
@@ -117,8 +124,7 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 	@Override
 	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		VoxelShape result = MODEL;
-		if (state.get(HALF) == DoubleBlockHalf.UPPER)
-			result = result.offset(0, -1, 0);
+		if (state.get(HALF) == DoubleBlockHalf.UPPER) result = result.offset(0, -1, 0);
 		return result;
 	}
 

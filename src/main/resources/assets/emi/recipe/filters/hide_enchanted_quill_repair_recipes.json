@@ -1,0 +1,7 @@
+{
+	"filters": [
+		{ "id": "emi:/crafting/repairing/wordstones/enchanted_quill" },
+		{ "id": "emi:/anvil/repairing/tool/wordstones/enchanted_quill" },
+		{ "id": "emi:/grindstone/repairing/wordstones/enchanted_quill" }
+	]
+}

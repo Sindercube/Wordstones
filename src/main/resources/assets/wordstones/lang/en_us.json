@@ -6,9 +6,15 @@
 	"block.wordstones.stone_stele": "Stone Stele",
 	"block.wordstones.deepslate_stele": "Deepslate Stele",
 
-	"item.wordstones.knowledge_fragment": "Knowledge Fragment",
+	"item.wordstones.enchanted_quill": "Enchanted Quill",
+	"item.wordstones.empty_quill": "Empty Quill",
+	"item.wordstones.enchanted_tome": "Enchanted Tome",
+	"item.wordstones.linked_tome": "Linked Tome",
 	"item.wordstones.last_will": "Last Will",
+	"item.wordstones.enchanted_squid_spawn_egg": "Enchanted Squid Spawn Egg",
 	"item.wordstones.bound_location": "%s (%d%n, %d%n, %d%n)",
+
+	"entityType.wordstones.enchanted_squid": "Enchanted Squid",
 
 	"tag.item.wordstones.kept_across_teleportation": "Kept Across Teleportation",
 
@@ -16,6 +22,11 @@
 	"screen.wordstones.edit_wordstone": "Edit Wordstone",
 	"screen.wordstones.teleport_to_wordstone": "Teleport to Wordstone",
 	"screen.stele.edit": "Edit Stele Message",
+
+	"subtitle.item.linked_tome.link": "Linked Tome links to Wordstone",
+	"subtitle.item.enchanted_quill.use.sign": "Text shifts",
+	"subtitle.block.drop_box.deposit": "Drop Box deposits items",
+	"subtitle.block.drop_box.retrieve": "Drop Box retrieves items",
 
 	"message.wordstones.word_exists": "This Word is already used by another Wordstone",
 	"message.wordstones.cannot_teleport_to_self": "You can't teleport to the Wordstone you are currently using",

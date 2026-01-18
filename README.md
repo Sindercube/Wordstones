@@ -1,25 +1,19 @@
 # About
 
-**Wordstones** is a Waystones inspired mod for fast travel
+**Wordstones** is a Waystones inspired mod that adds new progression to Strongholds and new means of personal teleportation
+
+> This project is still in development, expect bugs and missing features
 
 # Features
 
-## Wordstone
-Waystone inspired teleportation block
-- Placing it prompts you to enter a unique 4-letter combo
-- Using it prompts you to write any existing 4-letter combo and teleport
-- Teleporting drops all of your items on the ground
-  - The `keepInventory` gamerule prevents this
+- **Wordstones** the namesake of the mod, are a new block that can be used to travel to any other Wordstone
+- **Drop Boxes**, a new storage block that has a dedicated inventory for each player
+- **Enchanted Tomes**, a new item used for portable teleportation and used as a resource for crafting Wordstones and Enchanting tables
 
-## Drop Box
-Per Player inventory storage block
-- Stores an inventory for each player that interacts with it
-- Using it takes out all the items for your inventory
-- Using it while sneaking places all of your items in its inventory
-- When placed next to a Wordstone, all dropped items go in the Drop Box instead
-  - Can be disabled with the `wordstoneDropBoxInteraction` gamerule
+> For a full list of features, see the [Wiki](https://github.com/Sindercube/Wordstones/wiki)
 
-## Last Will
-Death inventory protecting item
-- Using it on a Drop Box binds its location
-- After you die, if you are holding the bound Last Will, it sends your items to the Drop Box instead of dropping them
+# License
+
+This project is licensed under [LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html)
+
+You are free to include this project in your modpacks

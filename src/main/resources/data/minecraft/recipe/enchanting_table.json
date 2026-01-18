@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+
+	"key": {
+		"#": { "item": "minecraft:obsidian" },
+		"D": { "item": "minecraft:diamond" },
+		"T": { "item": "wordstones:enchanted_tome" }
+	},
+	"pattern": [
+		" T ",
+		"D#D",
+		"###"
+	],
+
+	"result": {
+		"id": "minecraft:enchanting_table"
+	}
+}

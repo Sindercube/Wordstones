@@ -10,18 +10,18 @@ import org.sindercube.wordstones.content.block.entity.DropBoxEntity;
 import org.sindercube.wordstones.content.block.entity.SteleEntity;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
 
-public class WordstoneBlockEntityTypes {
+public class WordstonesBlockEntityTypes {
 
 	public static void init() {}
 
 	public static final BlockEntityType<WordstoneEntity> WORDSTONE = register("wordstone",
-		BlockEntityType.Builder.create(WordstoneEntity::new, WordstoneBlocks.WORDSTONE)
+		BlockEntityType.Builder.create(WordstoneEntity::new, WordstonesBlocks.WORDSTONE)
 	);
 	public static final BlockEntityType<DropBoxEntity> DROP_BOX = register("drop_box",
-		BlockEntityType.Builder.create(DropBoxEntity::new, WordstoneBlocks.DROP_BOX)
+		BlockEntityType.Builder.create(DropBoxEntity::new, WordstonesBlocks.DROP_BOX)
 	);
 	public static final BlockEntityType<SteleEntity> STELE = register("stele",
-		BlockEntityType.Builder.create(SteleEntity::new, WordstoneBlocks.STONE_STELE, WordstoneBlocks.DEEPSLATE_STELE)
+		BlockEntityType.Builder.create(SteleEntity::new, WordstonesBlocks.STONE_STELE, WordstonesBlocks.DEEPSLATE_STELE)
 	);
 
 	public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType.Builder<T> builder) {

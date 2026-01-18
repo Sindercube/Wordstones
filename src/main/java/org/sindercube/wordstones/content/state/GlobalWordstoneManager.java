@@ -50,9 +50,7 @@ public class GlobalWordstoneManager extends PersistentState {
 
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		System.out.println(this);
 		NbtCompound result = (NbtCompound) CODEC.encodeStart(NbtOps.INSTANCE, this.data).getOrThrow();
-		System.out.println(result);
 		return result;
 	}
 
