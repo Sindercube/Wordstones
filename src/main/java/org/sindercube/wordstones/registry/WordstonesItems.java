@@ -13,7 +13,7 @@ import net.minecraft.util.Rarity;
 import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.client.ModelPredicateProviderRegistry;
 import org.sindercube.wordstones.content.item.EnchantedQuillItem;
-import org.sindercube.wordstones.content.item.EnchantedTomeItem;
+import org.sindercube.wordstones.content.item.TomeItem;
 import org.sindercube.wordstones.content.item.LastWillItem;
 import org.sindercube.wordstones.content.item.LocationBindingItem;
 import org.sindercube.wordstones.util.ExtraPlayerEvents;
@@ -49,8 +49,8 @@ public class WordstonesItems {
 			.maxDamage(8)
 	);
 
-	public static final Item ENCHANTED_TOME = register("enchanted_tome",
-		EnchantedTomeItem::new,
+	public static final Item TOME = register("tome",
+		TomeItem::new,
 		new Item.Settings()
 	);
 

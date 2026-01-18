@@ -5,7 +5,7 @@
 	"key": {
 		"#": { "item": "minecraft:obsidian" },
 		"D": { "item": "minecraft:diamond" },
-		"T": { "item": "wordstones:enchanted_tome" }
+		"T": { "item": "wordstones:tome" }
 	},
 	"pattern": [
 		" T ",

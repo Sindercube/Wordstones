@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:item/generated",
 	"textures": {
-		"layer0": "wordstones:item/enchanted_tome"
+		"layer0": "wordstones:item/tome"
 	}
 }

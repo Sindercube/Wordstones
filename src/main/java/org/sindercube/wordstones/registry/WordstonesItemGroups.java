@@ -11,13 +11,13 @@ public class WordstonesItemGroups {
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> {
 			entries.addAfter(Items.ENDER_EYE, WordstonesItems.EMPTY_QUILL);
 			entries.addAfter(Items.ENDER_EYE, WordstonesItems.ENCHANTED_QUILL);
-			entries.addAfter(Items.ENDER_EYE, WordstonesItems.ENCHANTED_TOME);
+			entries.addAfter(Items.ENDER_EYE, WordstonesItems.TOME);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(entries -> {
 			entries.addAfter(Items.TOTEM_OF_UNDYING, WordstonesItems.LAST_WILL);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
-			entries.addAfter(Items.BOOK, WordstonesItems.ENCHANTED_TOME);
+			entries.addAfter(Items.BOOK, WordstonesItems.TOME);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> {
 			entries.addAfter(Blocks.ENCHANTING_TABLE, WordstonesBlocks.WORDSTONE);
