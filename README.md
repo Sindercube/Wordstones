@@ -8,7 +8,7 @@
 
 - **Wordstones** the namesake of the mod, are a new block that can be used to travel to any other Wordstone
 - **Drop Boxes**, a new storage block that has a dedicated inventory for each player
-- **Enchanted Tomes**, a new item used for portable teleportation and used as a resource for crafting Wordstones and Enchanting tables
+- **Tomes**, a new resource item found in Strongholds used for crafting Wordstones and Enchanting Tables
 
 > For a full list of features, see the [Wiki](https://github.com/Sindercube/Wordstones/wiki)
 
