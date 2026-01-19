@@ -24,6 +24,7 @@ public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 	private static final float HANGING_OFFSET = (float) 4 / 16;
 	private static final float TEXT_OFFSET = (float) 2 / 16 + 0.001F;
 	private static final float TEXT_SCALE = (float) 2 / 64;
+
 	private final TextRenderer textRenderer;
 
 	public SteleRenderer(BlockEntityRendererFactory.Context context) {

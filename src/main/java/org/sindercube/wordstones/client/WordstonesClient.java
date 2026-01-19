@@ -4,18 +4,13 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
-import org.sindercube.wordstones.client.registry.WordstoneEntityRenderers;
-import org.sindercube.wordstones.registry.WordstonesBlocks;
-import org.sindercube.wordstones.registry.WordstonesItems;
-import org.sindercube.wordstones.registry.WordstonesPackets;
-import org.sindercube.wordstones.registry.WordstonesParticleTypes;
+import org.sindercube.wordstones.registry.*;
 
 public class WordstonesClient implements ClientModInitializer {
 
-	@Deprecated
 	@Override
 	public void onInitializeClient() {
-		WordstoneEntityRenderers.init();
+		WordstonesEntityTypes.clientInit();
 		WordstonesItems.clientInit();
 		WordstonesBlocks.clientInit();
 		WordstonesPackets.clientInit();

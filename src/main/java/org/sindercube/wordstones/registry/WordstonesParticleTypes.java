@@ -13,12 +13,12 @@ import net.minecraft.registry.Registry;
 
 public class WordstonesParticleTypes {
 
+	public static void init() {}
+
 	@Environment(EnvType.CLIENT)
 	public static void clientInit() {
 		ParticleFactoryRegistry.getInstance().register(ENCHANTED_INK, SquidInkParticle.Factory::new);
 	}
-
-	public static void init() {}
 
 	public static final ParticleType<SimpleParticleType> ENCHANTED_INK = register("enchanted_ink", FabricParticleTypes.simple());
 

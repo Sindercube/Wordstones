@@ -13,20 +13,16 @@ import net.minecraft.util.Rarity;
 import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.client.ModelPredicateProviderRegistry;
 import org.sindercube.wordstones.content.item.EnchantedQuillItem;
-import org.sindercube.wordstones.content.item.TomeItem;
 import org.sindercube.wordstones.content.item.LastWillItem;
 import org.sindercube.wordstones.content.item.LocationBindingItem;
-import org.sindercube.wordstones.util.ExtraPlayerEvents;
+import org.sindercube.wordstones.content.item.TomeItem;
 
 import java.util.function.Function;
 
 public class WordstonesItems {
 
-	public static void init() {
-		ExtraPlayerEvents.BEFORE_DEATH.register(LastWillItem::beforeDeath);
-	}
+	public static void init() {}
 
-	@Deprecated
 	@Environment(EnvType.CLIENT)
 	public static void clientInit() {
 		ModelPredicateProviderRegistry.register(

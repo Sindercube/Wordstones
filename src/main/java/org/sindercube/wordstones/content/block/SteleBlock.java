@@ -81,10 +81,14 @@ public class SteleBlock extends AbstractSignBlock {
 
 	@Override
 	public void openEditScreen(PlayerEntity player, SignBlockEntity entity, boolean front) {
-		if (!(player instanceof ServerPlayerEntity serverPlayer)) return;
+		if (player instanceof ServerPlayerEntity serverPlayer) {
+			entity.setEditor(player.getUuid());
+			ServerPlayNetworking.send(serverPlayer, new SteleEditS2CPacket(entity.getPos(), front));
+		} else {
+//			player.client
+		}
 
-		entity.setEditor(player.getUuid());
-		ServerPlayNetworking.send(serverPlayer, new SteleEditS2CPacket(entity.getPos(), front));
+
 	}
 
 	@Override

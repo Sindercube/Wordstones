@@ -9,10 +9,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import org.sindercube.wordstones.GlobalWordstoneManager;
 import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.content.Word;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
-import org.sindercube.wordstones.content.state.GlobalWordstoneManager;
 
 public record WordstoneTeleportC2SPacket(BlockPos pos, Word word) implements CustomPayload {
 
@@ -29,11 +29,11 @@ public record WordstoneTeleportC2SPacket(BlockPos pos, Word word) implements Cus
 		return ID;
 	}
 
-	public static void handle(WordstoneTeleportC2SPacket packet, ServerPlayNetworking.Context context) {
+	public void handle(ServerPlayNetworking.Context context) {
 		context.server().execute(() -> {
 			ServerWorld world = context.server().getOverworld();
 			PlayerEntity player = context.player();
-			if (!(world.getBlockEntity(packet.pos) instanceof WordstoneEntity wordstone)) return;
+			if (!(world.getBlockEntity(this.pos) instanceof WordstoneEntity wordstone)) return;
 
 			if (wordstone.isPlayerTooFar(player)) {
 				player.sendMessage(Text.translatable("message.wordstones.player_too_far").formatted(Formatting.RED), true);
@@ -44,16 +44,16 @@ public record WordstoneTeleportC2SPacket(BlockPos pos, Word word) implements Cus
 				return;
 			}
 
-			if (packet.word.equals(wordstone.getWord())) {
+			if (this.word.equals(wordstone.getWord())) {
 				player.sendMessage(Text.translatable("message.wordstones.cannot_teleport_to_self"), true);
 				return;
 			}
-			if (!GlobalWordstoneManager.get(world).getData().containsKey(packet.word)) {
+			if (!GlobalWordstoneManager.get(world).getData().containsKey(this.word)) {
 				player.sendMessage(Text.translatable("message.wordstones.not_found"), true);
 				return;
 			}
 
-			WordstoneEntity.teleportToWordstone(world, player, packet.word);
+			WordstoneEntity.teleportToWordstone(world, player, this.word);
 		});
 	}
 

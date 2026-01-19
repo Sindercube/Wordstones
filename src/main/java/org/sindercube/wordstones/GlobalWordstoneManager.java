@@ -1,4 +1,4 @@
-package org.sindercube.wordstones.content.state;
+package org.sindercube.wordstones;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.nbt.NbtCompound;
@@ -17,7 +17,9 @@ public class GlobalWordstoneManager extends PersistentState {
 	public static final Codec<Map<Word, Location>> CODEC = Codec.unboundedMap(Word.CODEC, Location.CODEC);
 
 	public static GlobalWordstoneManager get(ServerWorld world) {
-		return world.getServer().getOverworld().getPersistentStateManager().getOrCreate(GlobalWordstoneManager.getPersistentStateType(), "wordstones:global_wordstones");
+		return world.getServer().getOverworld().getPersistentStateManager().getOrCreate(
+			GlobalWordstoneManager.getPersistentStateType(), "wordstones:global_wordstones"
+		);
 	}
 
 	public static Type<GlobalWordstoneManager> getPersistentStateType() {
@@ -50,8 +52,7 @@ public class GlobalWordstoneManager extends PersistentState {
 
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		NbtCompound result = (NbtCompound) CODEC.encodeStart(NbtOps.INSTANCE, this.data).getOrThrow();
-		return result;
+		return (NbtCompound) CODEC.encodeStart(NbtOps.INSTANCE, this.data).getOrThrow();
 	}
 
 	public static GlobalWordstoneManager fromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {

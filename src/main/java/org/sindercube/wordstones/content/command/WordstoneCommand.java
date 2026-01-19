@@ -13,9 +13,9 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import org.sindercube.wordstones.GlobalWordstoneManager;
 import org.sindercube.wordstones.content.Word;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
-import org.sindercube.wordstones.content.state.GlobalWordstoneManager;
 import org.sindercube.wordstones.util.Location;
 
 import java.util.Map;

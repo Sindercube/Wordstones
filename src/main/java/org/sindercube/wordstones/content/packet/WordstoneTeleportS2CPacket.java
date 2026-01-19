@@ -26,9 +26,9 @@ public record WordstoneTeleportS2CPacket(BlockPos pos) implements CustomPayload 
 	}
 
 	@Environment(EnvType.CLIENT)
-	public static void handle(WordstoneTeleportS2CPacket packet, ClientPlayNetworking.Context context) {
+	public void handle(ClientPlayNetworking.Context context) {
 		context.client().execute(() -> {
-			if (context.player().getWorld().getBlockEntity(packet.pos) instanceof WordstoneEntity wordstone) {
+			if (context.player().getWorld().getBlockEntity(this.pos) instanceof WordstoneEntity wordstone) {
 				context.client().setScreen(new WordstoneTeleportScreen(wordstone));
 			}
 		});

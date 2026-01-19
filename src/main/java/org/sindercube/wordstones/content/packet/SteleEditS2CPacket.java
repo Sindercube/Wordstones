@@ -12,10 +12,7 @@ import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.client.content.screen.SteleEditScreen;
 import org.sindercube.wordstones.content.block.entity.SteleEntity;
 
-public record SteleEditS2CPacket(
-	BlockPos pos,
-	boolean front
-) implements CustomPayload {
+public record SteleEditS2CPacket(BlockPos pos, boolean front) implements CustomPayload {
 
 	public static final Id<SteleEditS2CPacket> ID = new Id<>(Wordstones.of("stele_edit_s2c"));
 
@@ -31,10 +28,10 @@ public record SteleEditS2CPacket(
 	}
 
 	@Environment(EnvType.CLIENT)
-	public static void handle(SteleEditS2CPacket packet, ClientPlayNetworking.Context context) {
+	public void handle(ClientPlayNetworking.Context context) {
 		context.client().execute(() -> {
-			if (context.player().getWorld().getBlockEntity(packet.pos) instanceof SteleEntity entity) {
-				context.client().setScreen(new SteleEditScreen(entity, packet.front, context.client().shouldFilterText()));
+			if (context.player().getWorld().getBlockEntity(this.pos) instanceof SteleEntity entity) {
+				context.client().setScreen(new SteleEditScreen(entity, this.front, context.client().shouldFilterText()));
 			}
 		});
 	}

@@ -26,9 +26,9 @@ public record WordstoneEditS2CPacket(BlockPos pos) implements CustomPayload {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public static void handle(WordstoneEditS2CPacket packet, ClientPlayNetworking.Context context) {
+	public void handle(ClientPlayNetworking.Context context) {
 		context.client().execute(() -> {
-			if (context.player().getWorld().getBlockEntity(packet.pos) instanceof WordstoneEntity entity) {
+			if (context.player().getWorld().getBlockEntity(this.pos) instanceof WordstoneEntity entity) {
 				context.client().setScreen(new WordstoneEditScreen(entity));
 			}
 		});
