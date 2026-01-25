@@ -5,7 +5,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -15,7 +14,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
-import org.sindercube.wordstones.content.entity.WordstonesPlayerInventory;
 import org.sindercube.wordstones.registry.WordstonesBlockEntityTypes;
 
 import java.util.HashMap;
@@ -24,72 +22,59 @@ import java.util.UUID;
 
 public class DropBoxEntity extends BlockEntity {
 
-	protected Map<UUID, PlayerInventory> playerInventories = new HashMap<>();
+	protected Map<UUID, DropBoxInventory> inventories = new HashMap<>();
 
 	public DropBoxEntity(BlockPos pos, BlockState state) {
         super(WordstonesBlockEntityTypes.DROP_BOX, pos, state);
     }
 
 	@Override
-	protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		super.writeNbt(nbt, registryLookup);
-		if (this.playerInventories == null || this.playerInventories.isEmpty()) return;
+	protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup) {
+		super.writeNbt(nbt, lookup);
+		if (this.inventories == null || this.inventories.isEmpty()) return;
+
 		NbtCompound compound = new NbtCompound();
-		this.playerInventories.forEach((uuid, inventory) -> {
-			((WordstonesPlayerInventory)inventory).setRegistryLookup(registryLookup);
+		this.inventories.forEach((uuid, inventory) -> {
 			NbtList list = new NbtList();
-			list = inventory.writeNbt(list);
+			list = inventory.writeNbt(list, lookup);
 			compound.put(uuid.toString(), list);
 		});
 		nbt.put("player_inventories", compound);
 	}
 
 	@Override
-	protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		super.readNbt(nbt, registryLookup);
+	protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup) {
+		super.readNbt(nbt, lookup);
 		if (!nbt.contains("player_inventories")) return;
 
 		NbtCompound compound = nbt.getCompound("player_inventories");
 		compound.getKeys().forEach(uuid -> {
 			NbtList list = compound.getList(uuid, 10);
-			PlayerInventory inventory = new PlayerInventory(null);
-			((WordstonesPlayerInventory)inventory).setRegistryLookup(registryLookup);
-			inventory.readNbt(list);
-			this.playerInventories.put(UUID.fromString(uuid), inventory);
+			DropBoxInventory inventory = new DropBoxInventory();
+			inventory.readNbt(list, lookup);
+			this.inventories.put(UUID.fromString(uuid), inventory);
 		});
 	}
 
-	public boolean hasPlayerInventory(PlayerEntity player) {
-		return this.playerInventories.containsKey(player.getUuid());
+	public boolean hasInventoryForPlayer(PlayerEntity player) {
+		return this.inventories.containsKey(player.getUuid());
 	}
 
 	public ActionResult depositItems(PlayerEntity player) {
 		UUID uuid = player.getUuid();
-		if (this.playerInventories.containsKey(uuid)) {
+		if (this.inventories.containsKey(uuid)) {
 			player.sendMessage(Text.translatable("block.wordstones.drop_box.inventory_exists"), true);
 			return ActionResult.FAIL;
 		}
 
-		PlayerInventory newInventory = copyInventory(player);
+		DropBoxInventory newInventory = DropBoxInventory.copyFromPlayer(player);
 		if (newInventory.isEmpty()) return ActionResult.FAIL;
 
-		this.playerInventories.put(uuid, newInventory);
+		this.inventories.put(uuid, newInventory);
 		unequipPlayer(player);
 
 		markDirty();
 		return ActionResult.SUCCESS;
-	}
-
-	public static PlayerInventory copyInventory(PlayerEntity player) {
-		PlayerInventory inventory = new PlayerInventory(null);
-		for (int slot = 0; slot < inventory.size(); slot++) {
-			ItemStack stack = player.getInventory().getStack(slot);
-			if (EnchantmentHelper.hasAnyEnchantmentsWith(stack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE))
-				continue;
-			if (!EnchantmentHelper.hasAnyEnchantmentsWith(stack, EnchantmentEffectComponentTypes.PREVENT_EQUIPMENT_DROP))
-				inventory.setStack(slot, stack);
-		}
-		return inventory;
 	}
 
 	public static void unequipPlayer(PlayerEntity player) {
@@ -102,20 +87,20 @@ public class DropBoxEntity extends BlockEntity {
 
 	public ActionResult retrieveItems(PlayerEntity player) {
 		UUID uuid = player.getUuid();
-		if (!this.playerInventories.containsKey(uuid)) {
+		if (!this.inventories.containsKey(uuid)) {
 			player.sendMessage(Text.translatable("block.wordstones.drop_box.inventory_not_exists"), true);
 			return ActionResult.FAIL;
 		}
 
-		PlayerInventory inventory = this.playerInventories.get(uuid);
+		DropBoxInventory inventory = this.inventories.get(uuid);
 		equipPlayer(inventory, player);
-		this.playerInventories.remove(uuid);
+		this.inventories.remove(uuid);
 
 		markDirty();
 		return ActionResult.SUCCESS;
 	}
 
-	public static void equipPlayer(PlayerInventory inventory, PlayerEntity player) {
+	public static void equipPlayer(DropBoxInventory inventory, PlayerEntity player) {
 		for (int slot = 0; slot < inventory.size(); slot++) {
 			ItemStack stack = inventory.getStack(slot);
 			if (player.getInventory().getStack(slot).isEmpty()) {

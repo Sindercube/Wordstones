@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:item/template/book",
 	"textures": {
-		"layer0": "wordstones:item/tome"
+		"layer0": "minecraft:item/knowledge_book"
 	}
 }

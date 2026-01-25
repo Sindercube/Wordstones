@@ -3,6 +3,7 @@ package org.sindercube.wordstones.registry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.client.render.RenderLayer;
@@ -13,7 +14,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.content.block.DropBoxBlock;
@@ -34,13 +34,10 @@ public class WordstonesBlocks {
 		);
 	}
 
-	public static final WoodType STONE_TYPE = WoodType.register(
-		new WoodType("stone", BlockSetType.STONE, BlockSoundGroup.STONE, BlockSoundGroup.STONE, SoundEvents.BLOCK_FENCE_GATE_CLOSE, SoundEvents.BLOCK_FENCE_GATE_OPEN)
-	);
-
-	public static final WoodType DEEPSLATE_TYPE = WoodType.register(
-		new WoodType("deepslate", BlockSetType.STONE, BlockSoundGroup.DEEPSLATE, BlockSoundGroup.DEEPSLATE, SoundEvents.BLOCK_FENCE_GATE_CLOSE, SoundEvents.BLOCK_FENCE_GATE_OPEN)
-	);
+	public static final WoodType STONE_TYPE =
+		new WoodTypeBuilder().register(Wordstones.of("stone"), BlockSetType.STONE);
+	public static final WoodType DEEPSLATE_TYPE =
+		new WoodTypeBuilder().soundGroup(BlockSoundGroup.DEEPSLATE).register(Wordstones.of("deepslate"), BlockSetType.STONE);
 
 	public static final Block WORDSTONE = register("wordstone",
 		WordstoneBlock::new,

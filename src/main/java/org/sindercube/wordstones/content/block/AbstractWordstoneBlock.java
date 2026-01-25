@@ -5,6 +5,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -36,7 +37,7 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 		BOTTOM_MODEL = Block.createCuboidShape(0, 0, 0, 16, 8, 16),
 		BASE_MODEL = Block.createCuboidShape(2, 8, 2, 14, 24, 14),
 		TOP_MODEL = Block.createCuboidShape(0, 24, 0, 16, 32, 16),
-		MODEL = VoxelShapes.union(BOTTOM_MODEL, BASE_MODEL, TOP_MODEL);
+		MODEL = VoxelShapes.union(BOTTOM_MODEL, BASE_MODEL, TOP_MODEL).simplify();
 
 	public AbstractWordstoneBlock(Settings settings) {
 		super(settings);
@@ -98,14 +99,23 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 		return belowState.isOf(this) && belowState.get(HALF) == DoubleBlockHalf.LOWER;
 	}
 
-	public static BlockState withWaterloggedState(WorldView world, BlockPos pos, BlockState state) {
-		return state.contains(Properties.WATERLOGGED) ? state.with(Properties.WATERLOGGED, world.isWater(pos)) : state;
-	}
-
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		if (!world.isClient && player.isCreative()) {
-			TallPlantBlock.onBreakInCreative(world, pos, state, player);
+		if (!world.isClient) {
+			if (player.isCreative()) {
+				DoubleBlockHalf half = state.get(HALF);
+				if (half == DoubleBlockHalf.UPPER) {
+					BlockPos belowPos = pos.down();
+					BlockState belowState = world.getBlockState(belowPos);
+					if (belowState.isOf(state.getBlock()) && belowState.get(HALF) == DoubleBlockHalf.LOWER) {
+						BlockState blockState2 = belowState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
+						world.setBlockState(belowPos, blockState2, 35);
+						world.syncWorldEvent(player, 2001, belowPos, Block.getRawIdFromState(belowState));
+					}
+				}
+			} else {
+				dropStacks(state, world, pos, null, player, player.getMainHandStack());
+			}
 		}
 
 		return super.onBreak(world, pos, state, player);

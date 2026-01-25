@@ -3,7 +3,6 @@
 	"package": "org.sindercube.wordstones.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"PlayerInventoryMixin",
 		"ServerPlayerEntityMixin"
 	],
 	"injectors": {

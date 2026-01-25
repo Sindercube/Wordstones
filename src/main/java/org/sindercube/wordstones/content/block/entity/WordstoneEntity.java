@@ -12,10 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -69,7 +66,7 @@ public class WordstoneEntity extends BlockEntity {
 
 	@Override
     public void markRemoved() {
-		if (this.world != null && this.world instanceof ServerWorld serverWorld && serverWorld.isChunkLoaded(this.pos)) {
+		if (this.world != null && this.world instanceof ServerWorld serverWorld && serverWorld.isChunkLoaded(new ChunkPos(this.getPos()).toLong())) {
 			GlobalWordstoneManager.get(serverWorld).remove(word);
 		}
 		super.markRemoved();
@@ -172,7 +169,7 @@ public class WordstoneEntity extends BlockEntity {
 
 		for (Direction direction : Direction.Type.HORIZONTAL) {
 			BlockEntity entity = world.getBlockEntity(pos.offset(direction));
-			if (entity instanceof DropBoxEntity dropBox && !dropBox.hasPlayerInventory(player)) {
+			if (entity instanceof DropBoxEntity dropBox && !dropBox.hasInventoryForPlayer(player)) {
 				dropBox.depositItems(player);
 				return;
 			}

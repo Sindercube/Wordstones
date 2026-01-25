@@ -13,7 +13,6 @@ import net.minecraft.util.Rarity;
 import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.client.ModelPredicateProviderRegistry;
 import org.sindercube.wordstones.content.item.EnchantedQuillItem;
-import org.sindercube.wordstones.content.item.LastWillItem;
 import org.sindercube.wordstones.content.item.LocationBindingItem;
 import org.sindercube.wordstones.content.item.TomeItem;
 
@@ -50,12 +49,12 @@ public class WordstonesItems {
 		new Item.Settings()
 	);
 
-	public static final Item LAST_WILL = register("last_will",
-		LastWillItem::new,
-		new Item.Settings()
-			.maxCount(1)
-			.rarity(Rarity.RARE)
-	);
+//	public static final Item LAST_WILL = register("last_will",
+//		LastWillItem::new,
+//		new Item.Settings()
+//			.maxCount(1)
+//			.rarity(Rarity.RARE)
+//	);
 
 	public static final Item ENCHANTED_SQUID_SPAWN_EGG = register("enchanted_squid_spawn_egg",
 		settings -> new SpawnEggItem(WordstonesEntityTypes.ENCHANTED_SQUID, 0xA5A5FF, 0x7132A1, settings)

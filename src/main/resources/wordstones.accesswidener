@@ -1,8 +1,8 @@
 accessWidener v2 named
 
-accessible field net/minecraft/entity/player/PlayerInventory combinedInventory Ljava/util/List;
+#accessible field net/minecraft/entity/player/PlayerInventory combinedInventory Ljava/util/List;
 accessible method net/minecraft/block/TallPlantBlock onBreakInCreative (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V
-accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
+#accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
 
 accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen messages [Ljava/lang/String;
 mutable field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen messages [Ljava/lang/String;

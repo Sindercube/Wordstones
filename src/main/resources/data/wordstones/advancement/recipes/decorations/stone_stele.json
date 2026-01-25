@@ -1,7 +1,8 @@
 {
 	"parent": "minecraft:recipes/root",
 	"criteria": {
-		"has_deepslate": {
+		"has_stone": {
+			"trigger": "minecraft:inventory_changed",
 			"conditions": {
 				"items": [
 					{
@@ -11,20 +12,19 @@
 						"items": "minecraft:stone"
 					}
 				]
-			},
-			"trigger": "minecraft:inventory_changed"
+			}
 		},
 		"has_the_recipe": {
+			"trigger": "minecraft:recipe_unlocked",
 			"conditions": {
 				"recipe": "wordstones:stone_stele"
-			},
-			"trigger": "minecraft:recipe_unlocked"
+			}
 		}
 	},
 	"requirements": [
 		[
 			"has_the_recipe",
-			"has_lots_of_items"
+			"has_stone"
 		]
 	],
 	"rewards": {
