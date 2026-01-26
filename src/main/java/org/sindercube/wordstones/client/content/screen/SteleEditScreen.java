@@ -9,7 +9,6 @@ import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.joml.Vector3f;
-import org.sindercube.wordstones.Wordstones;
 
 public class SteleEditScreen extends AbstractSignEditScreen {
 
@@ -17,7 +16,7 @@ public class SteleEditScreen extends AbstractSignEditScreen {
 
 	public SteleEditScreen(SignBlockEntity entity, boolean front, boolean filtered) {
 		super(entity, front, filtered, Text.translatable("screen.stele.edit"));
-		this.texture = Wordstones.of("textures/gui/screen/stele/" + this.signType.name() + ".png");
+		this.texture = Identifier.tryParse(this.signType.name()).withPath(path -> "textures/gui/screen/stele/" + path + ".png");
 	}
 
 	@Override
