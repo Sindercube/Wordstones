@@ -28,12 +28,16 @@ public record SteleEditS2CPacket(BlockPos pos, boolean front) implements CustomP
 	}
 
 	@Environment(EnvType.CLIENT)
-	public void handle(ClientPlayNetworking.Context context) {
-		context.client().execute(() -> {
-			if (context.player().getWorld().getBlockEntity(this.pos) instanceof SteleEntity entity) {
-				context.client().setScreen(new SteleEditScreen(entity, this.front, context.client().shouldFilterText()));
-			}
-		});
+	public static class Handler {
+
+		public static void handle(SteleEditS2CPacket packet, ClientPlayNetworking.Context context) {
+			context.client().execute(() -> {
+				if (context.player().getWorld().getBlockEntity(packet.pos) instanceof SteleEntity entity) {
+					context.client().setScreen(new SteleEditScreen(entity, packet.front, context.client().shouldFilterText()));
+				}
+			});
+		}
+
 	}
 
 }

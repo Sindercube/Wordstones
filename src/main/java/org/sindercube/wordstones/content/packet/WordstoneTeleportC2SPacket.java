@@ -29,32 +29,36 @@ public record WordstoneTeleportC2SPacket(BlockPos pos, Word word) implements Cus
 		return ID;
 	}
 
-	public void handle(ServerPlayNetworking.Context context) {
-		context.server().execute(() -> {
-			ServerWorld world = context.server().getOverworld();
-			PlayerEntity player = context.player();
-			if (!(world.getBlockEntity(this.pos) instanceof WordstoneEntity wordstone)) return;
+	public static class Handler {
 
-			if (wordstone.isPlayerTooFar(player)) {
-				player.sendMessage(Text.translatable("message.wordstones.player_too_far").formatted(Formatting.RED), true);
-				return;
-			}
-			if (!wordstone.hasWord()) {
-				player.sendMessage(Text.translatable("message.wordstones.does_not_have_word").formatted(Formatting.RED), true);
-				return;
-			}
+		public static void handle(WordstoneTeleportC2SPacket packet, ServerPlayNetworking.Context context) {
+			context.server().execute(() -> {
+				ServerWorld world = context.server().getOverworld();
+				PlayerEntity player = context.player();
+				if (!(world.getBlockEntity(packet.pos) instanceof WordstoneEntity wordstone)) return;
 
-			if (this.word.equals(wordstone.getWord())) {
-				player.sendMessage(Text.translatable("message.wordstones.cannot_teleport_to_self"), true);
-				return;
-			}
-			if (!GlobalWordstoneManager.get(world).getData().containsKey(this.word)) {
-				player.sendMessage(Text.translatable("message.wordstones.not_found"), true);
-				return;
-			}
+				if (wordstone.isPlayerTooFar(player)) {
+					player.sendMessage(Text.translatable("message.wordstones.player_too_far").formatted(Formatting.RED), true);
+					return;
+				}
+				if (!wordstone.hasWord()) {
+					player.sendMessage(Text.translatable("message.wordstones.does_not_have_word").formatted(Formatting.RED), true);
+					return;
+				}
 
-			WordstoneEntity.teleportToWordstone(world, player, this.word);
-		});
+				if (packet.word.equals(wordstone.getWord())) {
+					player.sendMessage(Text.translatable("message.wordstones.cannot_teleport_to_self"), true);
+					return;
+				}
+				if (!GlobalWordstoneManager.get(world).getData().containsKey(packet.word)) {
+					player.sendMessage(Text.translatable("message.wordstones.not_found"), true);
+					return;
+				}
+
+				WordstoneEntity.teleportToWordstone(world, player, packet.word);
+			});
+		}
+
 	}
 
 }

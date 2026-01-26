@@ -16,16 +16,16 @@ public class WordstonesPackets {
 		PayloadTypeRegistry.playS2C().register(WordstoneEditS2CPacket.ID, WordstoneEditS2CPacket.CODEC);
 		PayloadTypeRegistry.playS2C().register(WordstoneTeleportS2CPacket.ID, WordstoneTeleportS2CPacket.CODEC);
 		PayloadTypeRegistry.playS2C().register(SteleEditS2CPacket.ID, SteleEditS2CPacket.CODEC);
+
+		ServerPlayNetworking.registerGlobalReceiver(WordstoneEditC2SPacket.ID, WordstoneEditC2SPacket.Handler::handle);
+		ServerPlayNetworking.registerGlobalReceiver(WordstoneTeleportC2SPacket.ID, WordstoneTeleportC2SPacket.Handler::handle);
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void clientInit() {
-		ServerPlayNetworking.registerGlobalReceiver(WordstoneEditC2SPacket.ID, WordstoneEditC2SPacket::handle);
-		ServerPlayNetworking.registerGlobalReceiver(WordstoneTeleportC2SPacket.ID, WordstoneTeleportC2SPacket::handle);
-
-		ClientPlayNetworking.registerGlobalReceiver(WordstoneEditS2CPacket.ID, WordstoneEditS2CPacket::handle);
-		ClientPlayNetworking.registerGlobalReceiver(WordstoneTeleportS2CPacket.ID, WordstoneTeleportS2CPacket::handle);
-		ClientPlayNetworking.registerGlobalReceiver(SteleEditS2CPacket.ID, SteleEditS2CPacket::handle);
+		ClientPlayNetworking.registerGlobalReceiver(WordstoneEditS2CPacket.ID, WordstoneEditS2CPacket.Handler::handle);
+		ClientPlayNetworking.registerGlobalReceiver(WordstoneTeleportS2CPacket.ID, WordstoneTeleportS2CPacket.Handler::handle);
+		ClientPlayNetworking.registerGlobalReceiver(SteleEditS2CPacket.ID, SteleEditS2CPacket.Handler::handle);
 	}
 
 }

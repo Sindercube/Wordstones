@@ -13,7 +13,7 @@ import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
 
 public record WordstoneEditS2CPacket(BlockPos pos) implements CustomPayload {
 
-	public static final CustomPayload.Id<WordstoneEditS2CPacket> ID = new CustomPayload.Id<>(Wordstones.of("wordstone_edit_s2c"));
+	public static final Id<WordstoneEditS2CPacket> ID = new Id<>(Wordstones.of("wordstone_edit_s2c"));
 
 	public static final PacketCodec<RegistryByteBuf, WordstoneEditS2CPacket> CODEC = PacketCodec.tuple(
 		BlockPos.PACKET_CODEC, WordstoneEditS2CPacket::pos,
@@ -26,12 +26,16 @@ public record WordstoneEditS2CPacket(BlockPos pos) implements CustomPayload {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public void handle(ClientPlayNetworking.Context context) {
-		context.client().execute(() -> {
-			if (context.player().getWorld().getBlockEntity(this.pos) instanceof WordstoneEntity entity) {
-				context.client().setScreen(new WordstoneEditScreen(entity));
-			}
-		});
+	public static class Handler {
+
+		public static void handle(WordstoneEditS2CPacket packet, ClientPlayNetworking.Context context) {
+			context.client().execute(() -> {
+				if (context.player().getWorld().getBlockEntity(packet.pos) instanceof WordstoneEntity entity) {
+					context.client().setScreen(new WordstoneEditScreen(entity));
+				}
+			});
+		}
+
 	}
 
 }

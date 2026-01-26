@@ -16,7 +16,7 @@ import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
 
 public record WordstoneEditC2SPacket(BlockPos pos, Word word) implements CustomPayload {
 
-	public static final CustomPayload.Id<WordstoneEditC2SPacket> ID = new CustomPayload.Id<>(Wordstones.of("wordstone_edit_c2s"));
+	public static final Id<WordstoneEditC2SPacket> ID = new Id<>(Wordstones.of("wordstone_edit_c2s"));
 
 	public static final PacketCodec<RegistryByteBuf, WordstoneEditC2SPacket> CODEC = PacketCodec.tuple(
 		BlockPos.PACKET_CODEC, WordstoneEditC2SPacket::pos,
@@ -25,32 +25,36 @@ public record WordstoneEditC2SPacket(BlockPos pos, Word word) implements CustomP
 	);
 
 	@Override
-	public CustomPayload.Id<? extends CustomPayload> getId() {
+	public Id<? extends CustomPayload> getId() {
 		return ID;
 	}
 
-	public void handle(ServerPlayNetworking.Context context) {
-		context.server().execute(() -> {
-			ServerWorld world = context.server().getOverworld();
-			PlayerEntity player = context.player();
-			if (!(world.getBlockEntity(this.pos) instanceof WordstoneEntity wordstone)) return;
+	public static class Handler {
 
-			if (wordstone.isPlayerTooFar(player)) {
-				player.sendMessage(Text.translatable("message.wordstones.player_too_far").formatted(Formatting.RED), true);
-				return;
-			}
-			if (wordstone.hasWord()) {
-				player.sendMessage(Text.translatable("message.wordstones.already_has_word").formatted(Formatting.RED), true);
-				return;
-			}
+		public static void handle(WordstoneEditC2SPacket packet, ServerPlayNetworking.Context context) {
+			context.server().execute(() -> {
+				ServerWorld world = context.server().getOverworld();
+				PlayerEntity player = context.player();
+				if (!(world.getBlockEntity(packet.pos) instanceof WordstoneEntity wordstone)) return;
 
-			if (GlobalWordstoneManager.get(world).getData().containsKey(this.word)) {
-				player.sendMessage(Text.translatable("message.wordstones.word_exists"), true);
-				return;
-			}
+				if (wordstone.isPlayerTooFar(player)) {
+					player.sendMessage(Text.translatable("message.wordstones.player_too_far").formatted(Formatting.RED), true);
+					return;
+				}
+				if (wordstone.hasWord()) {
+					player.sendMessage(Text.translatable("message.wordstones.already_has_word").formatted(Formatting.RED), true);
+					return;
+				}
 
-			wordstone.setWord(this.word);
-		});
+				if (GlobalWordstoneManager.get(world).getData().containsKey(packet.word)) {
+					player.sendMessage(Text.translatable("message.wordstones.word_exists"), true);
+					return;
+				}
+
+				wordstone.setWord(packet.word);
+			});
+		}
+
 	}
 
 }
