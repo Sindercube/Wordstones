@@ -21,6 +21,7 @@ import org.sindercube.wordstones.GlobalWordstoneManager;
 import org.sindercube.wordstones.content.Word;
 import org.sindercube.wordstones.content.block.WordstoneBlock;
 import org.sindercube.wordstones.registry.WordstonesBlockEntityTypes;
+import org.sindercube.wordstones.registry.WordstonesSoundEvents;
 import org.sindercube.wordstones.registry.WordstonesTags;
 import org.sindercube.wordstones.util.Location;
 
@@ -155,10 +156,17 @@ public class WordstoneEntity extends BlockEntity {
 		if (player.hasVehicle()) player.stopRiding();
 		player.setYaw(direction.getOpposite().asRotation());
 		player.setPitch(0);
+
+		locationWorld.playSound(null, player.getX(), player.getY(), player.getZ(),
+			WordstonesSoundEvents.ENTITY_PLAYER_TELEPORT,
+			SoundCategory.PLAYERS,
+			1, 1
+		);
+
 		player.requestTeleport(vec.x, vec.y, vec.z);
 
 		locationWorld.playSound(null, player.getX(), player.getY(), player.getZ(),
-			SoundEvents.ENTITY_ENDERMAN_TELEPORT,
+			WordstonesSoundEvents.ENTITY_PLAYER_TELEPORT,
 			SoundCategory.PLAYERS,
 			1, 1
 		);

@@ -16,6 +16,7 @@ public class WordstonesSoundEvents {
 	public static final SoundEvent ITEM_ENCHANTED_QUILL_USE_SIGN = register("item.enchanted_quill.use.sign");
 	public static final RegistryEntry<SoundEvent> DROP_BOX_DEPOSIT = registerReference("block.drop_box.deposit");
 	public static final RegistryEntry<SoundEvent> DROP_BOX_RETRIEVE = registerReference("block.drop_box.retrieve");
+	public static final RegistryEntry<SoundEvent> ENTITY_PLAYER_TELEPORT = registerReference("entity.player.teleport");
 
 	protected static SoundEvent register(String name) {
 		Identifier id = Wordstones.of(name);

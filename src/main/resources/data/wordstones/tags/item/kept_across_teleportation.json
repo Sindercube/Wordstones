@@ -1,7 +1,8 @@
 {
 	"values": [
-		"#c:enchantables",
-		"#c:tools",
+		"minecraft:compass",
+		"minecraft:recovery_compass",
+		"minecraft:clock",
 		"minecraft:spyglass"
 	]
 }

@@ -27,6 +27,7 @@
 	"subtitle.item.enchanted_quill.use.sign": "Text shifts",
 	"subtitle.block.drop_box.deposit": "Drop Box deposits items",
 	"subtitle.block.drop_box.retrieve": "Drop Box retrieves items",
+	"subtitle.entity.player.teleport": "Player teleports",
 
 	"message.wordstones.word_exists": "This Word is already used by another Wordstone",
 	"message.wordstones.cannot_teleport_to_self": "You can't teleport to the Wordstone you are currently using",
@@ -45,5 +46,8 @@
 	"gui.location": "%s, %s, %s in %s",
 	"dimension.minecraft.overworld": "Overworld",
 	"dimension.minecraft.the_nether": "The Nether",
-	"dimension.minecraft.the_end": "The End"
+	"dimension.minecraft.the_end": "The End",
+
+	"datapack.wordstones.forgiving_wordstones": "Forgiving Wordstones",
+	"datapack.wordstones.forgiving_wordstones.description": "Teleporting with Wordstones keeps your equipment"
 }
