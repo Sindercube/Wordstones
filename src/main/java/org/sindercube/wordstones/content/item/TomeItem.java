@@ -33,6 +33,7 @@ public class TomeItem extends Item {
 		Location location = stack.getOrDefault(WordstonesComponentTypes.LOCATION, Location.ZERO);
 		if (location.isZero()) return TypedActionResult.pass(stack);
 
+		stack.decrementUnlessCreative(1, player);
 		WordstoneEntity.teleportToLocation(player, location);
 		return TypedActionResult.success(stack);
 	}
@@ -60,9 +61,7 @@ public class TomeItem extends Item {
 			ItemStack copy = stack.copyWithCount(1);
 			stack.decrementUnlessCreative(1, player);
 			copy.set(WordstonesComponentTypes.LOCATION, location);
-			if (!player.getInventory().insertStack(copy)) {
-				player.dropItem(copy, false);
-			}
+			if (!player.getInventory().insertStack(copy)) player.dropItem(copy, false);
 		}
 		world.playSound(null, pos, WordstonesSoundEvents.ITEM_LINKED_TOME_LINK, SoundCategory.PLAYERS, 1, 1);
 

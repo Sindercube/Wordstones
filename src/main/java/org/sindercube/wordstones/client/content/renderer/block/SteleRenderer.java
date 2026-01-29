@@ -21,9 +21,8 @@ import java.util.List;
 public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 
 	private static final double RENDER_DISTANCE = MathHelper.square(16);
-	private static final float HANGING_OFFSET = (float) 4 / 16;
-	private static final float TEXT_OFFSET = (float) 2 / 16 + 0.001F;
-	private static final float TEXT_SCALE = (float) 2 / 64;
+	private static final float TEXT_OFFSET = 0.125F + 0.001F;
+	private static final float TEXT_SCALE = 0.0333F;
 
 	private final TextRenderer textRenderer;
 
@@ -37,8 +36,7 @@ public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 		BlockState state = entity.getCachedState();
 		SteleBlock block = (SteleBlock) state.getBlock();
 
-		matrices.translate(0.5F, 0, 0.5F);
-		if (state.get(SteleBlock.HANGING)) matrices.translate(0, HANGING_OFFSET, 0);
+		matrices.translate(0.5F, 0.875F, 0.5F);
 
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-block.getRotationDegrees(state)));
 		this.renderText(entity.getPos(), entity.getFrontText(), matrices, vertexConsumers, light, entity.getTextLineHeight(), entity.getMaxTextWidth());
@@ -52,31 +50,30 @@ public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 		matrices.push();
 
 		matrices.translate(0, 0, TEXT_OFFSET);
-		matrices.scale(TEXT_SCALE, -TEXT_SCALE, TEXT_SCALE);
+		matrices.scale(TEXT_SCALE, -TEXT_SCALE, -TEXT_SCALE);
 
-		int color = getColor(signText);
-		int spacing = 4 * lineHeight / 2;
 		OrderedText[] orderedTexts = signText.getOrderedMessages(MinecraftClient.getInstance().shouldFilterText(), (text) -> {
 			List<OrderedText> list = this.textRenderer.wrapLines(text, lineWidth);
 			return list.isEmpty() ? OrderedText.EMPTY : list.getFirst();
 		});
 
-		int signColor = color;
+		int color = getColor(signText);
+		int glowColor = color;
 		boolean drawOutline = false;
 
 		if (signText.isGlowing()) {
-			signColor = signText.getColor().getSignColor();
-			drawOutline = shouldRender(pos, signColor);
-			light = 15728880;
+			color = signText.getColor().getSignColor();
+			drawOutline = shouldRender(pos, color);
 		}
 
 		for (int i = 0; i < 2; ++i) {
 			OrderedText orderedText = orderedTexts[i];
-			float f = (float)(-this.textRenderer.getWidth(orderedText) / 2);
+			float x = (float)(-this.textRenderer.getWidth(orderedText) / 2);
+			float y = i * lineHeight - i;
 			if (drawOutline) {
-				this.textRenderer.drawWithOutline(orderedText, f, (float)(i * lineHeight - spacing), signColor, color, matrices.peek().getPositionMatrix(), vertexConsumers, light);
+				this.textRenderer.drawWithOutline(orderedText, x, y, color, glowColor, matrices.peek().getPositionMatrix(), vertexConsumers, 15728880);
 			} else {
-				this.textRenderer.draw(orderedText, f, (float)(i * lineHeight - spacing), signColor, false, matrices.peek().getPositionMatrix(), vertexConsumers, TextRenderer.TextLayerType.POLYGON_OFFSET, 0, light);
+				this.textRenderer.draw(orderedText, x, y, color, false, matrices.peek().getPositionMatrix(), vertexConsumers, TextRenderer.TextLayerType.POLYGON_OFFSET, 0, light);
 			}
 		}
 
@@ -99,7 +96,7 @@ public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 	public static int getColor(SignText sign) {
 		int color = sign.getColor().getSignColor();
 		if (color == DyeColor.BLACK.getSignColor() && sign.isGlowing()) {
-			return -988212;
+			return -0xF1434;
 		}
 		int r = (int)((double) ColorHelper.Argb.getRed(color) * 0.4F);
 		int g = (int)((double) ColorHelper.Argb.getGreen(color) * 0.4F);

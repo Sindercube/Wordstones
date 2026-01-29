@@ -1,0 +1,34 @@
+{
+	"variants": {
+		"facing=east,hanging=false": {
+			"model": "wordstones:block/stone_stela",
+			"y": 90
+		},
+		"facing=east,hanging=true": {
+			"model": "wordstones:block/hanging_stone_stela",
+			"y": 90
+		},
+		"facing=north,hanging=false": {
+			"model": "wordstones:block/stone_stela"
+		},
+		"facing=north,hanging=true": {
+			"model": "wordstones:block/hanging_stone_stela"
+		},
+		"facing=south,hanging=false": {
+			"model": "wordstones:block/stone_stela",
+			"y": 180
+		},
+		"facing=south,hanging=true": {
+			"model": "wordstones:block/hanging_stone_stela",
+			"y": 180
+		},
+		"facing=west,hanging=false": {
+			"model": "wordstones:block/stone_stela",
+			"y": 270
+		},
+		"facing=west,hanging=true": {
+			"model": "wordstones:block/hanging_stone_stela",
+			"y": 270
+		}
+	}
+}

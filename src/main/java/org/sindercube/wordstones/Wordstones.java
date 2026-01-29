@@ -29,23 +29,22 @@ public class Wordstones implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		WordstonesComponentTypes.init();
-
 		WordstonesBlocks.init();
 		WordstonesItems.init();
 		WordstonesEntityTypes.init();
 		WordstonesBlockEntityTypes.init();
+		WordstonesTags.init();
 
 		WordstonesItemGroups.init();
 		WordstonesSoundEvents.init();
-		WordstonesPackets.init();
-		WordstonesTags.init();
-
-		WordstonesCommands.init();
 		WordstonesParticleTypes.init();
 
+		WordstonesCommands.init();
+		WordstonesPackets.init();
+
 		LootTableEvents.MODIFY.register(WordstonesLootTableChanges::modifyLootTables);
-		UseEntityCallback.EVENT.register(EnchantedSquidEntity::tryTransformSquid);
 		ExtraPlayerEvents.BEFORE_DEATH.register(LastWillItem::beforeDeath);
+		UseEntityCallback.EVENT.register(EnchantedSquidEntity::tryTransformSquid);
 
 		ResourceManagerHelperImpl.registerBuiltinResourcePack(
 			of("forgiving-wordstones"),

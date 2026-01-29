@@ -5,11 +5,13 @@ import net.minecraft.block.*;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
@@ -30,7 +32,8 @@ import org.sindercube.wordstones.content.packet.WordstoneTeleportS2CPacket;
 
 public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
-	public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
+	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 	public static final EnumProperty<DoubleBlockHalf> HALF = Properties.DOUBLE_BLOCK_HALF;
 
 	public static final VoxelShape
@@ -42,6 +45,7 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 	public AbstractWordstoneBlock(Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateManager.getDefaultState()
+			.with(WATERLOGGED, false)
 			.with(FACING, Direction.NORTH)
 			.with(HALF, DoubleBlockHalf.LOWER)
 		);
@@ -49,7 +53,7 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(FACING, HALF);
+	builder.add(WATERLOGGED, FACING, HALF);
 	}
 
 	public void openEditScreen(PlayerEntity player, WordstoneEntity entity) {
@@ -69,9 +73,11 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
 	@Override
 	protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		DoubleBlockHalf doubleBlockHalf = state.get(HALF);
-		if (direction.getAxis() != Direction.Axis.Y || doubleBlockHalf == DoubleBlockHalf.LOWER != (direction == Direction.UP) || neighborState.isOf(this) && neighborState.get(HALF) != doubleBlockHalf) {
-			return doubleBlockHalf == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+		if (state.get(WATERLOGGED)) world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+
+		DoubleBlockHalf half = state.get(HALF);
+		if (direction.getAxis() != Direction.Axis.Y || half == DoubleBlockHalf.LOWER != (direction == Direction.UP) || neighborState.isOf(this) && neighborState.get(HALF) != half) {
+			return half == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 		} else {
 			return Blocks.AIR.getDefaultState();
 		}
@@ -79,7 +85,11 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-		world.setBlockState(pos.up(), this.getDefaultState().with(HALF, DoubleBlockHalf.UPPER));
+		world.setBlockState(pos.up(), this.getDefaultState()
+			.with(WATERLOGGED, world.getFluidState(pos.up()).getFluid() == Fluids.WATER)
+			.with(FACING, state.get(FACING))
+			.with(HALF, DoubleBlockHalf.UPPER)
+		);
 	}
 
 	@Override
@@ -88,7 +98,15 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 		World world = context.getWorld();
 		if (pos.getY() >= world.getTopY() - 1) return null;
 		if (!world.getBlockState(pos.up()).canReplace(context)) return null;
-		return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing().getOpposite());
+
+		return this.getDefaultState()
+			.with(WATERLOGGED, context.getWorld().getFluidState(context.getBlockPos()).getFluid() == Fluids.WATER)
+			.with(FACING, context.getHorizontalPlayerFacing().getOpposite());
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState state) {
+		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
 	}
 
 	@Override

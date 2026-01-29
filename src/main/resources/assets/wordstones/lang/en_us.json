@@ -36,6 +36,9 @@
 	"message.wordstones.player_too_far": "Too far away",
 	"message.wordstones.already_has_word": "This Wordstone already has a Word",
 
+	"message.wordstones.invalid_teleport": "The teleport location is obstructed",
+
+
 	"commands.wordstone.list.entry": "%s at %s",
 	"commands.wordstone.list.empty": "There are no Global Wordstones",
 	"commands.wordstone.list": "There are Wordstones at the following locations:",

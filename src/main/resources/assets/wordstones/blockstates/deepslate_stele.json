@@ -1,33 +1,48 @@
 {
 	"variants": {
-		"facing=east,hanging=false": {
+		"facing=east,type=top": {
+			"model": "wordstones:block/deepslate_stele_upper",
+			"y": 90
+		},
+		"facing=east,type=bottom": {
+			"model": "wordstones:block/deepslate_stele_lower",
+			"y": 90
+		},
+		"facing=east,type=double": {
 			"model": "wordstones:block/deepslate_stele",
 			"y": 90
 		},
-		"facing=east,hanging=true": {
-			"model": "wordstones:block/hanging_deepslate_stele",
-			"y": 90
+		"facing=north,type=top": {
+			"model": "wordstones:block/deepslate_stele_upper"
 		},
-		"facing=north,hanging=false": {
+		"facing=north,type=bottom": {
+			"model": "wordstones:block/deepslate_stele_lower"
+		},
+		"facing=north,type=double": {
 			"model": "wordstones:block/deepslate_stele"
 		},
-		"facing=north,hanging=true": {
-			"model": "wordstones:block/hanging_deepslate_stele"
+		"facing=south,type=top": {
+			"model": "wordstones:block/deepslate_stele_upper",
+			"y": 180
 		},
-		"facing=south,hanging=false": {
+		"facing=south,type=bottom": {
+			"model": "wordstones:block/deepslate_stele_lower",
+			"y": 180
+		},
+		"facing=south,type=double": {
 			"model": "wordstones:block/deepslate_stele",
 			"y": 180
 		},
-		"facing=south,hanging=true": {
-			"model": "wordstones:block/hanging_deepslate_stele",
-			"y": 180
-		},
-		"facing=west,hanging=false": {
-			"model": "wordstones:block/deepslate_stele",
+		"facing=west,type=top": {
+			"model": "wordstones:block/deepslate_stele_upper",
 			"y": 270
 		},
-		"facing=west,hanging=true": {
-			"model": "wordstones:block/hanging_deepslate_stele",
+		"facing=west,type=bottom": {
+			"model": "wordstones:block/deepslate_stele_lower",
+			"y": 270
+		},
+		"facing=west,type=double": {
+			"model": "wordstones:block/deepslate_stele",
 			"y": 270
 		}
 	}

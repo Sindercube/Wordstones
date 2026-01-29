@@ -36,6 +36,7 @@ public class WordstonesBlocks {
 
 	public static final WoodType STONE_TYPE =
 		new WoodTypeBuilder().register(Wordstones.of("stone"), BlockSetType.STONE);
+
 	public static final WoodType DEEPSLATE_TYPE =
 		new WoodTypeBuilder().soundGroup(BlockSoundGroup.DEEPSLATE).register(Wordstones.of("deepslate"), BlockSetType.STONE);
 

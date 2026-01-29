@@ -21,3 +21,4 @@
 This project is licensed under [LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html)
 
 You are free to include this project in your modpacks
+

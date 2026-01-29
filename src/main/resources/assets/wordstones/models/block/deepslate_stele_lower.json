@@ -1,5 +1,5 @@
 {
-	"parent": "wordstones:block/template/stele",
+	"parent": "wordstones:block/template/stele_lower",
 	"textures": {
 		"side": "wordstones:block/deepslate_stele_side",
 		"front": "wordstones:block/deepslate_stele_front",

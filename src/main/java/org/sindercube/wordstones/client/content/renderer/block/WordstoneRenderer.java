@@ -17,6 +17,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
 import org.sindercube.wordstones.content.block.WordstoneBlock;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
+import org.sindercube.wordstones.registry.WordstonesBlocks;
 
 public class WordstoneRenderer implements BlockEntityRenderer<WordstoneEntity> {
 
@@ -34,7 +35,7 @@ public class WordstoneRenderer implements BlockEntityRenderer<WordstoneEntity> {
 		if (world == null) return;
 
 		BlockState state = world.getBlockState(entity.getPos());
-		if (state.isAir()) return;
+		if (!state.isOf(WordstonesBlocks.WORDSTONE)) return;
 
 		matrices.push();
 		matrices.translate(0.5F, 0.8F, 0.5F);

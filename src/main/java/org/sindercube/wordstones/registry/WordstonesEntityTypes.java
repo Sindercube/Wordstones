@@ -31,6 +31,7 @@ public class WordstonesEntityTypes {
 		EntityRendererRegistry.register(WordstonesEntityTypes.ENCHANTED_SQUID, EnchantedSquidRenderer::getRenderer);
 		BlockEntityRendererFactories.register(WordstonesBlockEntityTypes.WORDSTONE, WordstoneRenderer::new);
 		BlockEntityRendererFactories.register(WordstonesBlockEntityTypes.STELE, SteleRenderer::new);
+		BlockEntityRendererFactories.register(WordstonesBlockEntityTypes.STELE, SteleRenderer::new);
 	}
 
 	public static final EntityType<EnchantedSquidEntity> ENCHANTED_SQUID = register("enchanted_squid",
