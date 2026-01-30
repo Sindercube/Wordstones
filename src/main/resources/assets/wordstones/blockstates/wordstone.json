@@ -16,16 +16,16 @@
 			"y": 270
 		},
 		"facing=east,half=upper": {
-			"model": "wordstones:block/empty"
+			"model": "wordstones:block/wordstone_empty"
 		},
 		"facing=north,half=upper": {
-			"model": "wordstones:block/empty"
+			"model": "wordstones:block/wordstone_empty"
 		},
 		"facing=south,half=upper": {
-			"model": "wordstones:block/empty"
+			"model": "wordstones:block/wordstone_empty"
 		},
 		"facing=west,half=upper": {
-			"model": "wordstones:block/empty"
+			"model": "wordstones:block/wordstone_empty"
 		}
 	}
 }

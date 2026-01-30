@@ -1,7 +1,0 @@
-{
-	"parent": "wordstones:block/template/hanging_stele",
-	"textures": {
-		"cube": "wordstones:block/stone_stele",
-		"particle": "minecraft:block/smooth_stone"
-	}
-}

@@ -36,9 +36,6 @@ public class SteleEditScreen extends AbstractSignEditScreen {
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-//		int min = this.topLine ? 0 : 1;
-//		int max = this.bottomLine ? 1 : 0;
-
 		int min = this.bottomLine && !this.topLine ? 1 : 0;
 		int max = !this.bottomLine && this.topLine ? 0 : 1;
 
@@ -86,10 +83,9 @@ public class SteleEditScreen extends AbstractSignEditScreen {
 
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
-		int length = this.messages[this.currentRow].length();
-		if (length >= 4) return false;
-
-		if (Character.isLetter(chr)) chr = Character.toUpperCase(chr);
+		if (Character.isLetter(chr)) {
+			chr = Character.toUpperCase(chr);
+		}
 		this.selectionManager.insert(chr);
 		return true;
 	}

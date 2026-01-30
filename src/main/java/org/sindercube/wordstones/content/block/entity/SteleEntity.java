@@ -18,6 +18,11 @@ public class SteleEntity extends SignBlockEntity {
 		return 16;
 	}
 
+	@Override
+	public int getMaxTextWidth() {
+		return 24;
+	}
+
 	public boolean hasTopLine() {
 		SlabType type = this.getCachedState().get(SteleBlock.TYPE);
 		return type == SlabType.TOP || type == SlabType.DOUBLE;

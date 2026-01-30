@@ -20,11 +20,12 @@ import java.util.List;
 
 public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 
-	private static final double RENDER_DISTANCE = MathHelper.square(16);
-	private static final float TEXT_OFFSET = 0.125F + 0.001F;
-	private static final float TEXT_SCALE = 0.0333F;
+	public static final double RENDER_DISTANCE = MathHelper.square(16);
+	public static final float TEXT_OFFSET = 0.125F + 0.001F;
+	public static final float TEXT_SCALE = 0.0333F;
+	public static final float ATTACHED_OFFSET = 0.375F;
 
-	private final TextRenderer textRenderer;
+	protected final TextRenderer textRenderer;
 
 	public SteleRenderer(BlockEntityRendererFactory.Context context) {
 		this.textRenderer = context.getTextRenderer();
@@ -37,6 +38,12 @@ public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 		SteleBlock block = (SteleBlock) state.getBlock();
 
 		matrices.translate(0.5F, 0.875F, 0.5F);
+		if (state.get(SteleBlock.ATTACHED)) switch (state.get(SteleBlock.FACING)) {
+			case NORTH -> matrices.translate(0, 0, ATTACHED_OFFSET);
+			case EAST -> matrices.translate(-ATTACHED_OFFSET, 0, 0);
+			case SOUTH -> matrices.translate(0, 0, -ATTACHED_OFFSET);
+			case WEST -> matrices.translate(ATTACHED_OFFSET, 0, 0);
+		}
 
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-block.getRotationDegrees(state)));
 		this.renderText(entity.getPos(), entity.getFrontText(), matrices, vertexConsumers, light, entity.getTextLineHeight(), entity.getMaxTextWidth());

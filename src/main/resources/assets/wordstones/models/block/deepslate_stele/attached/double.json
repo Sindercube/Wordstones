@@ -1,0 +1,9 @@
+{
+	"parent": "wordstones:block/template/stele/attached/double",
+	"textures": {
+		"side": "wordstones:block/deepslate_stele_side",
+		"front": "wordstones:block/deepslate_stele_front",
+		"end": "wordstones:block/deepslate_stele_end",
+		"particle": "minecraft:block/polished_deepslate"
+	}
+}

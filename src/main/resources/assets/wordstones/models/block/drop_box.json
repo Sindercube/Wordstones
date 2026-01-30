@@ -1,5 +1,5 @@
 {
-	"texture_size": [64, 64],
+	"parent": "minecraft:block/block",
 	"textures": {
 		"0": "wordstones:block/drop_box",
 		"particle": "wordstones:block/drop_box_generic"
