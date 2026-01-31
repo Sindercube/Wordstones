@@ -22,7 +22,7 @@ public class SteleEditScreen extends AbstractSignEditScreen {
 		super(entity, front, filtered, Text.translatable("screen.stele.edit"));
 		this.texture = Identifier.tryParse(this.signType.name())
 			.withPath(path -> "textures/gui/screen/stele/" + path)
-			.withPath(path -> path + "_" + entity.getCachedState().get(SteleBlock.TYPE) + ".png");
+			.withPath(path -> path + "/" + entity.getCachedState().get(SteleBlock.TYPE) + ".png");
 		this.topLine = entity.hasTopLine();
 		this.bottomLine = entity.hasBottomLine();
 		this.lines = this.topLine && this.bottomLine ? 2 : 1;

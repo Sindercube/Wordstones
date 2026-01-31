@@ -1,0 +1,35 @@
+{
+	"parent": "minecraft:recipes/root",
+	"criteria": {
+		"has_red_sandstone": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:red_sandstone"
+					},
+					{
+						"items": "minecraft:cut_red_sandstone"
+					}
+				]
+			}
+		},
+		"has_the_recipe": {
+			"trigger": "minecraft:recipe_unlocked",
+			"conditions": {
+				"recipe": "wordstones:red_sandstone_stele"
+			}
+		}
+	},
+	"requirements": [
+		[
+			"has_the_recipe",
+			"has_red_sandstone"
+		]
+	],
+	"rewards": {
+		"recipes": [
+			"wordstones:red_sandstone_stele"
+		]
+	}
+}

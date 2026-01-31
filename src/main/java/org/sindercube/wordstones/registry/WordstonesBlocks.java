@@ -40,6 +40,12 @@ public class WordstonesBlocks {
 	public static final WoodType DEEPSLATE_TYPE =
 		new WoodTypeBuilder().soundGroup(BlockSoundGroup.DEEPSLATE).register(Wordstones.of("deepslate"), BlockSetType.STONE);
 
+	public static final WoodType SANDSTONE_TYPE =
+		new WoodTypeBuilder().register(Wordstones.of("sandstone"), BlockSetType.STONE);
+
+	public static final WoodType RED_SANDSTONE_TYPE =
+		new WoodTypeBuilder().register(Wordstones.of("red_sandstone"), BlockSetType.STONE);
+
 	public static final Block WORDSTONE = register("wordstone",
 		WordstoneBlock::new,
 		AbstractBlock.Settings.create()
@@ -63,8 +69,6 @@ public class WordstonesBlocks {
 			.requiresTool()
 			.strength(5, 6)
 			.mapColor(MapColor.STONE_GRAY)
-			.instrument(NoteBlockInstrument.BASEDRUM)
-			.sounds(BlockSoundGroup.STONE)
 	);
 	public static final Block DEEPSLATE_STELE = register("deepslate_stele",
 		settings -> new SteleBlock(DEEPSLATE_TYPE, settings),
@@ -72,8 +76,21 @@ public class WordstonesBlocks {
 			.requiresTool()
 			.strength(5, 6)
 			.mapColor(MapColor.DEEPSLATE_GRAY)
-			.instrument(NoteBlockInstrument.BASEDRUM)
 			.sounds(BlockSoundGroup.POLISHED_DEEPSLATE)
+	);
+	public static final Block SANDSTONE_STELE = register("sandstone_stele",
+		settings -> new SteleBlock(SANDSTONE_TYPE, settings),
+		AbstractBlock.Settings.create()
+			.requiresTool()
+			.strength(5, 6)
+			.mapColor(MapColor.PALE_YELLOW)
+	);
+	public static final Block RED_SANDSTONE_STELE = register("red_sandstone_stele",
+		settings -> new SteleBlock(RED_SANDSTONE_TYPE, settings),
+		AbstractBlock.Settings.create()
+			.requiresTool()
+			.strength(5, 6)
+			.mapColor(MapColor.ORANGE)
 	);
 
 	public static Block register(String name) {

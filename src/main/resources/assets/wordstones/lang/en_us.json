@@ -5,6 +5,8 @@
 	"block.wordstones.drop_box.inventory_not_exists": "This Drop Box is empty",
 	"block.wordstones.stone_stele": "Stone Stele",
 	"block.wordstones.deepslate_stele": "Deepslate Stele",
+	"block.wordstones.sandstone_stele": "Sandstone Stele",
+	"block.wordstones.red_sandstone_stele": "Red Sandstone Stele",
 
 	"item.wordstones.enchanted_quill": "Enchanted Quill",
 	"item.wordstones.empty_quill": "Empty Quill",

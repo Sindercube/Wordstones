@@ -1,10 +1,10 @@
 {
 	"parent": "minecraft:block/block",
 	"textures": {
-		"0": "wordstones:block/wordstone_side",
-		"1": "wordstones:block/wordstone_plate_side",
-		"2": "wordstones:block/wordstone_plate_end",
-		"particle": "wordstones:block/wordstone_generic"
+		"0": "wordstones:block/wordstone/side",
+		"1": "wordstones:block/wordstone/plate_side",
+		"2": "wordstones:block/wordstone/plate_end",
+		"particle": "wordstones:block/wordstone/generic"
 	},
 	"elements": [
 		{

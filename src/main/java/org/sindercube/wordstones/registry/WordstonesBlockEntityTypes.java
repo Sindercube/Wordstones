@@ -21,7 +21,7 @@ public class WordstonesBlockEntityTypes {
 		BlockEntityType.Builder.create(DropBoxEntity::new, WordstonesBlocks.DROP_BOX)
 	);
 	public static final BlockEntityType<SteleEntity> STELE = register("stele",
-		BlockEntityType.Builder.create(SteleEntity::new, WordstonesBlocks.STONE_STELE, WordstonesBlocks.DEEPSLATE_STELE)
+		BlockEntityType.Builder.create(SteleEntity::new, WordstonesBlocks.STONE_STELE, WordstonesBlocks.DEEPSLATE_STELE, WordstonesBlocks.SANDSTONE_STELE, WordstonesBlocks.RED_SANDSTONE_STELE)
 	);
 
 	public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType.Builder<T> builder) {

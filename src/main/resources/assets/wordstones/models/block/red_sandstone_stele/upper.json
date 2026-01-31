@@ -1,0 +1,9 @@
+{
+	"parent": "wordstones:block/template/stele/upper",
+	"textures": {
+		"side": "wordstones:block/red_sandstone_stele/side",
+		"front": "wordstones:block/red_sandstone_stele/front",
+		"end": "wordstones:block/red_sandstone_stele/end",
+		"particle": "minecraft:block/cut_red_sandstone"
+	}
+}

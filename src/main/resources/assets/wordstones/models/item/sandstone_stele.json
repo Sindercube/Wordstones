@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:item/template/sign",
+	"textures": {
+		"layer0": "wordstones:item/sandstone_stele"
+	}
+}

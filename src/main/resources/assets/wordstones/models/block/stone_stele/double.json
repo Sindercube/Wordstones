@@ -1,9 +1,9 @@
 {
 	"parent": "wordstones:block/template/stele/double",
 	"textures": {
-		"side": "wordstones:block/stone_stele_side",
-		"front": "wordstones:block/stone_stele_front",
-		"end": "wordstones:block/stone_stele_end",
+		"side": "wordstones:block/stone_stele/side",
+		"front": "wordstones:block/stone_stele/front",
+		"end": "wordstones:block/stone_stele/end",
 		"particle": "minecraft:block/smooth_stone"
 	}
 }

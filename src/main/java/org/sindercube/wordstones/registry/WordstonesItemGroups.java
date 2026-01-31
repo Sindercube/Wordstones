@@ -21,7 +21,7 @@ public class WordstonesItemGroups {
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> {
 			entries.addAfter(Blocks.ENCHANTING_TABLE, WordstonesBlocks.WORDSTONE);
 			entries.addAfter(Blocks.ENDER_CHEST, WordstonesBlocks.DROP_BOX);
-			entries.addBefore(Blocks.CHEST, WordstonesBlocks.STONE_STELE, WordstonesBlocks.DEEPSLATE_STELE);
+			entries.addBefore(Blocks.CHEST, WordstonesBlocks.STONE_STELE, WordstonesBlocks.DEEPSLATE_STELE, WordstonesBlocks.SANDSTONE_STELE, WordstonesBlocks.RED_SANDSTONE_STELE);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> {
 			entries.addAfter(Items.ELDER_GUARDIAN_SPAWN_EGG, WordstonesItems.ENCHANTED_SQUID_SPAWN_EGG);

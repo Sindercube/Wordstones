@@ -3,6 +3,8 @@
 		"wordstones:wordstone",
 		"wordstones:drop_box",
 		"wordstones:stone_stele",
-		"wordstones:deepslate_stele"
+		"wordstones:deepslate_stele",
+		"wordstones:sandstone_stele",
+		"wordstones:red_sandstone_stele"
 	]
 }
