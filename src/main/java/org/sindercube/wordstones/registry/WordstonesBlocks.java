@@ -67,6 +67,7 @@ public class WordstonesBlocks {
 		settings -> new SteleBlock(STONE_TYPE, settings),
 		AbstractBlock.Settings.create()
 			.requiresTool()
+			.noCollision()
 			.strength(5, 6)
 			.mapColor(MapColor.STONE_GRAY)
 	);
@@ -74,6 +75,7 @@ public class WordstonesBlocks {
 		settings -> new SteleBlock(DEEPSLATE_TYPE, settings),
 		AbstractBlock.Settings.create()
 			.requiresTool()
+			.noCollision()
 			.strength(5, 6)
 			.mapColor(MapColor.DEEPSLATE_GRAY)
 			.sounds(BlockSoundGroup.POLISHED_DEEPSLATE)
@@ -82,6 +84,7 @@ public class WordstonesBlocks {
 		settings -> new SteleBlock(SANDSTONE_TYPE, settings),
 		AbstractBlock.Settings.create()
 			.requiresTool()
+			.noCollision()
 			.strength(5, 6)
 			.mapColor(MapColor.PALE_YELLOW)
 	);
@@ -89,6 +92,7 @@ public class WordstonesBlocks {
 		settings -> new SteleBlock(RED_SANDSTONE_TYPE, settings),
 		AbstractBlock.Settings.create()
 			.requiresTool()
+			.noCollision()
 			.strength(5, 6)
 			.mapColor(MapColor.ORANGE)
 	);
