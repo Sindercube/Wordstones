@@ -4,15 +4,16 @@
 
 # About
 
-**Wordstones** is a Waystones inspired mod that adds new progression to Strongholds and new means of personal teleportation
+**Wordstones** is a Waystones inspired mod that adds new means of personal teleportation, new progression to Strongholds and more
 
-> This project is still in development, expect bugs and missing features
+> [!WARNING]
+> This project is still in development, expect breaking updates and bugs
 
 # Features
 
 - **Wordstones**, the namesake of the mod, are a new block that can be used to travel to any other Wordstone
 - **Drop Boxes**, a new storage block that has a dedicated inventory for each player
-- **Tomes**, a new resource item found in Strongholds used for crafting Wordstones and Enchanting Tables
+- **Tomes**, a new resource item obtained from Strongholds used for crafting Wordstones and Enchanting Tables
 
 > For a full list of features, see the [Wiki](https://github.com/Sindercube/Wordstones/wiki)
 

@@ -55,7 +55,7 @@ public record WordstoneTeleportC2SPacket(BlockPos pos, Word word) implements Cus
 					return;
 				}
 
-				WordstoneEntity.teleportToWordstone(world, player, packet.word);
+				wordstone.teleportPlayer(world, player, packet.word);
 			});
 		}
 

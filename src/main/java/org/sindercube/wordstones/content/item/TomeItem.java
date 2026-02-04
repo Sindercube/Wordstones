@@ -12,6 +12,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.sindercube.wordstones.GlobalWordstoneManager;
 import org.sindercube.wordstones.Wordstones;
 import org.sindercube.wordstones.content.block.WordstoneBlock;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
@@ -34,7 +35,7 @@ public class TomeItem extends Item {
 		if (location.isZero()) return TypedActionResult.pass(stack);
 
 		stack.decrementUnlessCreative(1, player);
-		WordstoneEntity.teleportToLocation(player, location);
+		GlobalWordstoneManager.teleportToLocation(player, location);
 		return TypedActionResult.success(stack);
 	}
 
