@@ -3,7 +3,7 @@
 	"category": "misc",
 
 	"key": {
-		"#": { "item": "minecraft:red_sandstone" }
+		"#": { "item": "minecraft:red_sandstone_slab" }
 	},
 	"pattern": [
 		"###",
@@ -12,6 +12,6 @@
 
 	"result": {
 		"id": "wordstones:red_sandstone_stele",
-		"count": 6
+		"count": 3
 	}
 }
