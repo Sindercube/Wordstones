@@ -173,22 +173,8 @@ public class SteleBlock extends AbstractSignBlock {
 
 	@Override
 	public boolean canReplace(BlockState state, ItemPlacementContext context) {
-		if (!context.canReplaceExisting()) return false;
-		if (!state.isOf(this)) return false;
-		if (state.get(TYPE) == SlabType.DOUBLE) return false;
-
-		ItemStack stack = context.getStack();
-		if (!stack.isOf(this.asItem())) return false;
-
-		Direction direction = context.getSide();
-		boolean isTop = direction.getAxis().isHorizontal()
-			? context.getHitPos().y - context.getBlockPos().getY() > 0.5F
-			: direction == Direction.UP;
-
-		SlabType type = state.get(TYPE);
-		if (isTop && type == SlabType.BOTTOM) return true;
-		if (!isTop && type == SlabType.TOP) return true;
-		return false;
+		if (state.isOf(this) && getSlabType(state) == SlabType.DOUBLE) return false;
+		return context.getStack().isOf(this.asItem());
 	}
 
 	@Override
