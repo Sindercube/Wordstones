@@ -2,21 +2,23 @@ package org.sindercube.wordstones.client.content.renderer.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.SignText;
+import net.minecraft.block.enums.SlabType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.*;
+import net.minecraft.world.World;
 import org.sindercube.wordstones.content.block.SteleBlock;
 import org.sindercube.wordstones.content.block.entity.SteleEntity;
-
-import java.util.List;
 
 public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 
@@ -26,43 +28,63 @@ public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 	public static final float ATTACHED_OFFSET = 0.375F;
 
 	protected final TextRenderer textRenderer;
+	protected final BlockRenderManager manager;
 
 	public SteleRenderer(BlockEntityRendererFactory.Context context) {
 		this.textRenderer = context.getTextRenderer();
+		this.manager = context.getRenderManager();
 	}
 
 	@Override
 	public void render(SteleEntity entity, float f, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		matrices.push();
+		World world = entity.getWorld();
+		if (world == null) return;
+
 		BlockState state = entity.getCachedState();
-		SteleBlock block = (SteleBlock) state.getBlock();
+		if (SteleBlock.hasTop(state)) {
+			this.renderHalf(world, state, entity, SlabType.TOP, 0, matrices, vertexConsumers, light);
+		}
+		if (SteleBlock.hasBottom(state)) {
+			this.renderHalf(world, state, entity, SlabType.BOTTOM, 1, matrices, vertexConsumers, light);
+		}
+	}
+
+	public void renderHalf(World world, BlockState state, SteleEntity entity, SlabType half, int line, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+		matrices.push();
+
+		state = state.with(SteleBlock.TYPE, half);
+		float rotation = SteleBlock.getRenderRotationDegrees(state);
+		this.renderBlock(world, entity, state, matrices, vertexConsumers);
 
 		matrices.translate(0.5F, 0.875F, 0.5F);
-		if (state.get(SteleBlock.ATTACHED)) switch (state.get(SteleBlock.FACING)) {
+		if (state.get(SteleBlock.ATTACHED)) switch (SteleBlock.getRotation(state)) {
 			case NORTH -> matrices.translate(0, 0, ATTACHED_OFFSET);
 			case EAST -> matrices.translate(-ATTACHED_OFFSET, 0, 0);
 			case SOUTH -> matrices.translate(0, 0, -ATTACHED_OFFSET);
 			case WEST -> matrices.translate(ATTACHED_OFFSET, 0, 0);
 		}
 
-		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-block.getRotationDegrees(state)));
-		this.renderText(entity.getPos(), entity.getFrontText(), matrices, vertexConsumers, light, entity.getTextLineHeight(), entity.getMaxTextWidth());
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotation));
+		this.renderText(entity.getPos(), entity.getFrontText(), line, matrices, vertexConsumers, light, entity.getTextLineHeight());
 
-		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-		this.renderText(entity.getPos(), entity.getBackText(), matrices, vertexConsumers, light, entity.getTextLineHeight(), entity.getMaxTextWidth());
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-180));
+		this.renderText(entity.getPos(), entity.getBackText(), line, matrices, vertexConsumers, light, entity.getTextLineHeight());
 		matrices.pop();
 	}
 
-	void renderText(BlockPos pos, SignText signText, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int lineHeight, int lineWidth) {
-		matrices.push();
+	public void renderBlock(World world, SteleEntity entity, BlockState state, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+		this.manager.renderBlock(
+			state,
+			entity.getPos(), world, matrices,
+			vertexConsumers.getBuffer(RenderLayers.getBlockLayer(state)),
+			false,
+			world.getRandom()
+		);
+	}
 
-		matrices.translate(0, 0, TEXT_OFFSET);
-		matrices.scale(TEXT_SCALE, -TEXT_SCALE, -TEXT_SCALE);
-
-		OrderedText[] orderedTexts = signText.getOrderedMessages(MinecraftClient.getInstance().shouldFilterText(), (text) -> {
-			List<OrderedText> list = this.textRenderer.wrapLines(text, lineWidth);
-			return list.isEmpty() ? OrderedText.EMPTY : list.getFirst();
-		});
+	public void renderText(BlockPos pos, SignText signText, int line, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int lineHeight) {
+		Text text = signText.getMessage(line, MinecraftClient.getInstance().shouldFilterText());
+		if (text == null) return;
 
 		int color = getColor(signText);
 		int glowColor = color;
@@ -73,15 +95,18 @@ public class SteleRenderer implements BlockEntityRenderer<SteleEntity> {
 			drawOutline = shouldRender(pos, color);
 		}
 
-		for (int i = 0; i < 2; ++i) {
-			OrderedText orderedText = orderedTexts[i];
-			float x = (float)(-this.textRenderer.getWidth(orderedText) / 2);
-			float y = i * lineHeight - i;
-			if (drawOutline) {
-				this.textRenderer.drawWithOutline(orderedText, x, y, color, glowColor, matrices.peek().getPositionMatrix(), vertexConsumers, 15728880);
-			} else {
-				this.textRenderer.draw(orderedText, x, y, color, false, matrices.peek().getPositionMatrix(), vertexConsumers, TextRenderer.TextLayerType.POLYGON_OFFSET, 0, light);
-			}
+		float x = (float)(-this.textRenderer.getWidth(text) / 2) + 0.25F;
+		float y = line * lineHeight - line;
+
+		matrices.push();
+
+		matrices.translate(0, 0, TEXT_OFFSET);
+		matrices.scale(TEXT_SCALE, -TEXT_SCALE, -TEXT_SCALE);
+
+		if (drawOutline) {
+			this.textRenderer.drawWithOutline(text.asOrderedText(), x, y, color, glowColor, matrices.peek().getPositionMatrix(), vertexConsumers, 15728880);
+		} else {
+			this.textRenderer.draw(text, x, y, color, false, matrices.peek().getPositionMatrix(), vertexConsumers, TextRenderer.TextLayerType.POLYGON_OFFSET, 0, light);
 		}
 
 		matrices.pop();

@@ -20,11 +20,12 @@ public class SteleEditScreen extends AbstractSignEditScreen {
 
 	public SteleEditScreen(SteleEntity entity, boolean front, boolean filtered) {
 		super(entity, front, filtered, Text.translatable("screen.stele.edit"));
+		BlockState state = entity.getCachedState();
 		this.texture = Identifier.tryParse(this.signType.name())
 			.withPath(path -> "textures/gui/screen/stele/" + path)
-			.withPath(path -> path + "/" + entity.getCachedState().get(SteleBlock.TYPE) + ".png");
-		this.topLine = entity.hasTopLine();
-		this.bottomLine = entity.hasBottomLine();
+			.withPath(path -> path + "/" + SteleBlock.getSlabType(state) + ".png");
+		this.topLine = SteleBlock.hasTop(state);
+		this.bottomLine = SteleBlock.hasBottom(state);
 		this.lines = this.topLine && this.bottomLine ? 2 : 1;
 	}
 

@@ -32,7 +32,8 @@ import org.sindercube.wordstones.content.packet.SteleEditS2CPacket;
 
 public class SteleBlock extends AbstractSignBlock {
 
-	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+	public static final DirectionProperty TOP_FACING = DirectionProperty.of("top_facing", Direction.Type.HORIZONTAL);
+	public static final DirectionProperty BOTTOM_FACING = DirectionProperty.of("bottom_facing", Direction.Type.HORIZONTAL);
 	public static final EnumProperty<SlabType> TYPE = Properties.SLAB_TYPE;
 	public static final BooleanProperty ATTACHED = Properties.ATTACHED;
 
@@ -55,21 +56,57 @@ public class SteleBlock extends AbstractSignBlock {
 	public SteleBlock(WoodType type, Settings settings) {
 		super(type, settings);
 		this.setDefaultState(this.stateManager.getDefaultState()
-			.with(FACING, Direction.NORTH)
+			.with(TOP_FACING, Direction.NORTH)
+			.with(BOTTOM_FACING, Direction.NORTH)
 			.with(TYPE, SlabType.BOTTOM)
 			.with(ATTACHED, false)
 			.with(WATERLOGGED, false)
 		);
 	}
 
-	@Override
-	public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(FACING, TYPE, ATTACHED, WATERLOGGED);
+	public static Direction getRotation(BlockState state) {
+		return state.get(SteleBlock.TYPE) == SlabType.TOP
+			? state.get(SteleBlock.TOP_FACING)
+			: state.get(SteleBlock.BOTTOM_FACING);
 	}
 
+	public static SlabType getSlabType(BlockState state) {
+		return state.get(TYPE);
+	}
+
+	public static boolean hasTop(BlockState state) {
+		SlabType type = getSlabType(state);
+		return type == SlabType.TOP || type == SlabType.DOUBLE;
+	}
+
+	public static boolean hasBottom(BlockState state) {
+		SlabType type = getSlabType(state);
+		return type == SlabType.BOTTOM || type == SlabType.DOUBLE;
+	}
+
+//	public Direction getRotation(BlockState state) {
+//		return state.get(SteleBlock.TYPE) == SlabType.TOP
+//			? state.get(SteleBlock.TOP_FACING)
+//			: state.get(SteleBlock.BOTTOM_FACING);
+//	}
+//
+//	public SlabType getSlabType(BlockState state) {
+//		return state.get(TYPE);
+//	}
+//
+//	public boolean hasTop(BlockState state) {
+//		SlabType type = this.getSlabType(state);
+//		return type == SlabType.TOP || type == SlabType.DOUBLE;
+//	}
+//
+//	public boolean hasBottom(BlockState state) {
+//		SlabType type = this.getSlabType(state);
+//		return type == SlabType.BOTTOM || type == SlabType.DOUBLE;
+//	}
+
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
+	public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		builder.add(TOP_FACING, BOTTOM_FACING, TYPE, ATTACHED, WATERLOGGED);
 	}
 
 	@Override
@@ -98,50 +135,60 @@ public class SteleBlock extends AbstractSignBlock {
 	public BlockState getPlacementState(ItemPlacementContext context) {
 		BlockPos pos = context.getBlockPos();
 		BlockState existingState = context.getWorld().getBlockState(pos);
-		if (existingState.isOf(this)) {
-			return existingState.with(TYPE, SlabType.DOUBLE);
-		}
+		if (existingState.isOf(this)) return this.updateExistingState(context, existingState);
 
-		Direction direction;
-		boolean attached;
-		if (context.getSide().getAxis().isHorizontal()) {
-			direction = context.getSide();
-			attached = true;
-		} else {
-			direction = context.getHorizontalPlayerFacing().getOpposite();
-			attached = false;
-		}
-
-		return this.getDefaultState()
-			.with(TYPE, getPlacementType(context))
-			.with(FACING, direction)
-			.with(ATTACHED, attached)
-			.with(WATERLOGGED, context.getWorld().getFluidState(pos).getFluid() == Fluids.WATER);
-	}
-
-	public static SlabType getPlacementType(ItemPlacementContext context) {
-		return switch (context.getSide().getOpposite()) {
+		SlabType type = switch (context.getSide().getOpposite()) {
 			case UP -> SlabType.TOP;
 			case DOWN -> SlabType.BOTTOM;
 			default -> context.getHitPos().y - context.getBlockPos().getY() > 0.5F ? SlabType.TOP : SlabType.BOTTOM;
+		};
+		boolean attached = context.getSide().getAxis().isHorizontal();
+		boolean waterlogged = context.getWorld().getFluidState(pos).getFluid() == Fluids.WATER;
+
+		BlockState state = this.getDefaultState()
+			.with(TYPE, type)
+			.with(ATTACHED, attached)
+			.with(WATERLOGGED, waterlogged);
+
+		Direction direction = attached ? context.getSide() : context.getHorizontalPlayerFacing().getOpposite();
+		return switch (type) {
+			case TOP -> state.with(TOP_FACING, direction);
+			case BOTTOM -> state.with(BOTTOM_FACING, direction);
+			default -> state;
+		};
+	}
+
+	public BlockState updateExistingState(ItemPlacementContext context, BlockState state) {
+		SlabType type = state.get(TYPE);
+		if (type == SlabType.DOUBLE) return state;
+
+		state = state.with(TYPE, SlabType.DOUBLE);
+		Direction direction = context.getHorizontalPlayerFacing().getOpposite();
+		return switch (type) {
+			case TOP -> state.with(BOTTOM_FACING, direction);
+			case BOTTOM -> state.with(TOP_FACING, direction);
+			default -> state;
 		};
 	}
 
 	@Override
 	public boolean canReplace(BlockState state, ItemPlacementContext context) {
+		if (!context.canReplaceExisting()) return false;
+		if (!state.isOf(this)) return false;
+		if (state.get(TYPE) == SlabType.DOUBLE) return false;
+
 		ItemStack stack = context.getStack();
-		SlabType type = state.get(TYPE);
-		if (type == SlabType.DOUBLE) return false;
 		if (!stack.isOf(this.asItem())) return false;
 
-		if (!context.canReplaceExisting()) return true;
-
-		boolean hitTopHalf = context.getHitPos().y - context.getBlockPos().getY() > 0.5F;
 		Direction direction = context.getSide();
-		if (type == SlabType.BOTTOM) {
-			return direction == Direction.UP || hitTopHalf && direction.getAxis().isHorizontal();
-		}
-		return direction == Direction.DOWN || !hitTopHalf && direction.getAxis().isHorizontal();
+		boolean isTop = direction.getAxis().isHorizontal()
+			? context.getHitPos().y - context.getBlockPos().getY() > 0.5F
+			: direction == Direction.UP;
+
+		SlabType type = state.get(TYPE);
+		if (isTop && type == SlabType.BOTTOM) return true;
+		if (!isTop && type == SlabType.TOP) return true;
+		return false;
 	}
 
 	@Override
@@ -155,30 +202,43 @@ public class SteleBlock extends AbstractSignBlock {
 
 	@Override
 	public BlockState rotate(BlockState state, BlockRotation rotation) {
-		return state.with(FACING, rotation.rotate(state.get(FACING)));
+		return state
+			.with(TOP_FACING, rotation.rotate(state.get(TOP_FACING)))
+			.with(BOTTOM_FACING, rotation.rotate(state.get(BOTTOM_FACING)));
 	}
 
 	@Override
 	public float getRotationDegrees(BlockState state) {
-		return state.get(FACING).asRotation();
+		return getRotation(state).asRotation();
+	}
+
+	public static float getRenderRotationDegrees(BlockState state) {
+		Direction direction = getRotation(state);
+		if (direction.getAxis() == Direction.Axis.X) direction = direction.getOpposite();
+		return direction.asRotation();
 	}
 
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		VoxelShape shape = state.get(FACING).getAxis() == Direction.Axis.X ? X_SHAPE : Z_SHAPE;
-		shape = switch (state.get(TYPE)) {
-			case BOTTOM -> shape;
-			case TOP -> shape.offset(0, VERTICAL_OFFSET, 0);
-			case DOUBLE -> VoxelShapes.union(shape, shape.offset(0, VERTICAL_OFFSET, 0)).simplify();
-		};
-		if (state.get(ATTACHED)) shape = switch (state.get(FACING)) {
+		SlabType type = state.get(TYPE);
+		VoxelShape shape = VoxelShapes.empty();
+		if (type == SlabType.TOP || type == SlabType.DOUBLE) shape = VoxelShapes.union(shape, getShapeForType(state, TOP_FACING, VERTICAL_OFFSET));
+		if (type == SlabType.BOTTOM || type == SlabType.DOUBLE) shape = VoxelShapes.union(shape, getShapeForType(state, BOTTOM_FACING, 0));
+		return shape.simplify();
+	}
+
+	public VoxelShape getShapeForType(BlockState state, DirectionProperty property, float offset) {
+		VoxelShape shape = state.get(property).getAxis() == Direction.Axis.X ? X_SHAPE : Z_SHAPE;
+
+		if (state.get(ATTACHED)) shape = switch (state.get(property)) {
 			case NORTH -> shape.offset(0, 0, ATTACHED_OFFSET);
 			case EAST -> shape.offset(-ATTACHED_OFFSET, 0, 0);
 			case SOUTH -> shape.offset(0, 0, -ATTACHED_OFFSET);
 			case WEST -> shape.offset(ATTACHED_OFFSET, 0, 0);
 			default -> shape;
 		};
-		return shape;
+
+		return shape.offset(0, offset, 0);
 	}
 
 }

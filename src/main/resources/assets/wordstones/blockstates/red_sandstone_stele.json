@@ -1,94 +1,176 @@
 {
-	"variants": {
-		"attached=false,facing=east,type=top": {
-			"model": "wordstones:block/red_sandstone_stele/upper",
-			"y": 90
+	"multipart": [
+		{
+			"when": {
+				"attached": "false",
+				"top_facing": "north",
+				"type": "top|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/upper"
+			}
 		},
-		"attached=false,facing=east,type=bottom": {
-			"model": "wordstones:block/red_sandstone_stele/lower",
-			"y": 90
+		{
+			"when": {
+				"attached": "false",
+				"top_facing": "east",
+				"type": "top|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/upper",
+				"y": 90
+			}
 		},
-		"attached=false,facing=east,type=double": {
-			"model": "wordstones:block/red_sandstone_stele/double",
-			"y": 90
+		{
+			"when": {
+				"attached": "false",
+				"top_facing": "south",
+				"type": "top|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/upper",
+				"y": 180
+			}
 		},
-		"attached=false,facing=north,type=top": {
-			"model": "wordstones:block/red_sandstone_stele/upper"
+		{
+			"when": {
+				"attached": "false",
+				"top_facing": "west",
+				"type": "top|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/upper",
+				"y": 270
+			}
 		},
-		"attached=false,facing=north,type=bottom": {
-			"model": "wordstones:block/red_sandstone_stele/lower"
+		{
+			"when": {
+				"attached": "false",
+				"bottom_facing": "north",
+				"type": "bottom|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/lower"
+			}
 		},
-		"attached=false,facing=north,type=double": {
-			"model": "wordstones:block/red_sandstone_stele/double"
+		{
+			"when": {
+				"attached": "false",
+				"bottom_facing": "east",
+				"type": "bottom|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/lower",
+				"y": 90
+			}
 		},
-		"attached=false,facing=south,type=top": {
-			"model": "wordstones:block/red_sandstone_stele/upper",
-			"y": 180
+		{
+			"when": {
+				"attached": "false",
+				"bottom_facing": "south",
+				"type": "bottom|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/lower",
+				"y": 180
+			}
 		},
-		"attached=false,facing=south,type=bottom": {
-			"model": "wordstones:block/red_sandstone_stele/lower",
-			"y": 180
+		{
+			"when": {
+				"attached": "false",
+				"bottom_facing": "west",
+				"type": "bottom|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/lower",
+				"y": 270
+			}
 		},
-		"attached=false,facing=south,type=double": {
-			"model": "wordstones:block/red_sandstone_stele/double",
-			"y": 180
+		{
+			"when": {
+				"attached": "true",
+				"top_facing": "north",
+				"type": "top|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/attached/upper"
+			}
 		},
-		"attached=false,facing=west,type=top": {
-			"model": "wordstones:block/red_sandstone_stele/upper",
-			"y": 270
+		{
+			"when": {
+				"attached": "true",
+				"top_facing": "east",
+				"type": "top|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/attached/upper",
+				"y": 90
+			}
 		},
-		"attached=false,facing=west,type=bottom": {
-			"model": "wordstones:block/red_sandstone_stele/lower",
-			"y": 270
+		{
+			"when": {
+				"attached": "true",
+				"top_facing": "south",
+				"type": "top|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/attached/upper",
+				"y": 180
+			}
 		},
-		"attached=false,facing=west,type=double": {
-			"model": "wordstones:block/red_sandstone_stele/double",
-			"y": 270
+		{
+			"when": {
+				"attached": "true",
+				"top_facing": "west",
+				"type": "top|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/attached/upper",
+				"y": 270
+			}
 		},
-		"attached=true,facing=east,type=top": {
-			"model": "wordstones:block/red_sandstone_stele/attached/upper",
-			"y": 90
+		{
+			"when": {
+				"attached": "true",
+				"bottom_facing": "north",
+				"type": "bottom|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/attached/lower"
+			}
 		},
-		"attached=true,facing=east,type=bottom": {
-			"model": "wordstones:block/red_sandstone_stele/attached/lower",
-			"y": 90
+		{
+			"when": {
+				"attached": "true",
+				"bottom_facing": "east",
+				"type": "bottom|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/attached/lower",
+				"y": 90
+			}
 		},
-		"attached=true,facing=east,type=double": {
-			"model": "wordstones:block/red_sandstone_stele/attached/double",
-			"y": 90
+		{
+			"when": {
+				"attached": "true",
+				"bottom_facing": "south",
+				"type": "bottom|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/attached/lower",
+				"y": 180
+			}
 		},
-		"attached=true,facing=north,type=top": {
-			"model": "wordstones:block/red_sandstone_stele/attached/upper"
-		},
-		"attached=true,facing=north,type=bottom": {
-			"model": "wordstones:block/red_sandstone_stele/attached/lower"
-		},
-		"attached=true,facing=north,type=double": {
-			"model": "wordstones:block/red_sandstone_stele/attached/double"
-		},
-		"attached=true,facing=south,type=top": {
-			"model": "wordstones:block/red_sandstone_stele/attached/upper",
-			"y": 180
-		},
-		"attached=true,facing=south,type=bottom": {
-			"model": "wordstones:block/red_sandstone_stele/attached/lower",
-			"y": 180
-		},
-		"attached=true,facing=south,type=double": {
-			"model": "wordstones:block/red_sandstone_stele/attached/double",
-			"y": 180
-		},
-		"attached=true,facing=west,type=top": {
-			"model": "wordstones:block/red_sandstone_stele/attached/upper",
-			"y": 270
-		},
-		"attached=true,facing=west,type=bottom": {
-			"model": "wordstones:block/red_sandstone_stele/attached/lower",
-			"y": 270
-		},
-		"attached=true,facing=west,type=double": {
-			"model": "wordstones:block/red_sandstone_stele/attached/double",
-			"y": 270
+		{
+			"when": {
+				"attached": "true",
+				"bottom_facing": "west",
+				"type": "bottom|double"
+			},
+			"apply": {
+				"model": "wordstones:block/red_sandstone_stele/attached/lower",
+				"y": 270
+			}
 		}
-	}
+	]
 }
