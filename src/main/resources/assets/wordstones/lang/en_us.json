@@ -37,6 +37,7 @@
 	"message.wordstones.does_not_have_word": "This Wordstone doesn't have a Word",
 	"message.wordstones.player_too_far": "Too far away",
 	"message.wordstones.already_has_word": "This Wordstone already has a Word",
+	"message.wordstones.no_longer_exists": "This Wordstone no longer exists",
 
 	"message.wordstones.invalid_teleport": "The teleport location is obstructed",
 

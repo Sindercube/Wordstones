@@ -1,9 +1,6 @@
 accessWidener v2 named
 
-#accessible field net/minecraft/entity/player/PlayerInventory combinedInventory Ljava/util/List;
-accessible method net/minecraft/block/TallPlantBlock onBreakInCreative (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V
-#accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
-
+# Stele
 accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen messages [Ljava/lang/String;
 mutable field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen messages [Ljava/lang/String;
 accessible field net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen text Lnet/minecraft/block/entity/SignText;
@@ -16,4 +13,5 @@ accessible method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen 
 accessible method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen renderSignText (Lnet/minecraft/client/gui/DrawContext;)V
 extendable method net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen renderSignText (Lnet/minecraft/client/gui/DrawContext;)V
 
+# Enchanted Squid
 accessible method net/minecraft/client/particle/SquidInkParticle <init> (Lnet/minecraft/client/world/ClientWorld;DDDDDDILnet/minecraft/client/particle/SpriteProvider;)V

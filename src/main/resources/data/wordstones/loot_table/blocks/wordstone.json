@@ -2,8 +2,15 @@
 	"type": "minecraft:block",
 	"pools": [
 		{
-			"bonus_rolls": 0.0,
+			"bonus_rolls": 0,
 			"conditions": [
+				{
+					"condition": "minecraft:block_state_property",
+					"block": "wordstones:wordstone",
+					"properties": {
+						"half": "lower"
+					}
+				},
 				{
 					"condition": "minecraft:survives_explosion"
 				}
@@ -14,7 +21,7 @@
 					"name": "wordstones:wordstone"
 				}
 			],
-			"rolls": 1.0
+			"rolls": 1
 		}
 	]
 }

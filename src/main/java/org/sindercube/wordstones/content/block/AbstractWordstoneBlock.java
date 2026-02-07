@@ -23,7 +23,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 import org.sindercube.wordstones.content.block.entity.WordstoneEntity;
@@ -53,7 +52,7 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-	builder.add(WATERLOGGED, FACING, HALF);
+		builder.add(WATERLOGGED, FACING, HALF);
 	}
 
 	public void openEditScreen(PlayerEntity player, WordstoneEntity entity) {
@@ -72,15 +71,8 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 	}
 
 	@Override
-	protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		if (state.get(WATERLOGGED)) world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-
-		DoubleBlockHalf half = state.get(HALF);
-		if (direction.getAxis() != Direction.Axis.Y || half == DoubleBlockHalf.LOWER != (direction == Direction.UP) || neighborState.isOf(this) && neighborState.get(HALF) != half) {
-			return half == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
-		} else {
-			return Blocks.AIR.getDefaultState();
-		}
+	protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+		super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
 	}
 
 	@Override
@@ -119,40 +111,22 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		if (world.isClient) return super.onBreak(world, pos, state, player);
+		System.out.println("TEST");
+		BlockPos entityPos = state.get(HALF) == DoubleBlockHalf.UPPER ? pos.down() : pos;
+		WordstoneEntity entity = (WordstoneEntity) world.getBlockEntity(entityPos);
+		if (entity != null) entity.onBroken();
 
-		if (state.get(HALF) == DoubleBlockHalf.UPPER) {
-			BlockPos belowPos = pos.down();
-			BlockState belowState = world.getBlockState(belowPos);
-			if (belowState.isOf(state.getBlock())) {
-				if (belowState.get(HALF) == DoubleBlockHalf.LOWER) {
-					BlockState blockState2 = belowState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
-					world.setBlockState(belowPos, blockState2, 35);
-					world.syncWorldEvent(player, 2001, belowPos, Block.getRawIdFromState(belowState));
-				}
-				WordstoneEntity entity = (WordstoneEntity) world.getBlockEntity(belowPos);
-				if (entity != null) entity.onBroken();
-			}
-		}
-
-//		if (!world.isClient) {
-//			if (player.isCreative()) {
-//				DoubleBlockHalf half = state.get(HALF);
-//				if (half == DoubleBlockHalf.UPPER) {
-//					BlockPos belowPos = pos.down();
-//					BlockState belowState = world.getBlockState(belowPos);
-//					if (belowState.isOf(state.getBlock()) && belowState.get(HALF) == DoubleBlockHalf.LOWER) {
-//						BlockState blockState2 = belowState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
-//						world.setBlockState(belowPos, blockState2, 35);
-//						world.syncWorldEvent(player, 2001, belowPos, Block.getRawIdFromState(belowState));
-//					}
-//				}
-//			} else {
-//				dropStacks(state, world, pos, null, player, player.getMainHandStack());
-//			}
-//		}
-
+		this.breakOtherHalf(world, pos, state, player);
 		return super.onBreak(world, pos, state, player);
+	}
+
+	public void breakOtherHalf(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		DoubleBlockHalf half = state.get(HALF);
+		Direction otherDirection = half == DoubleBlockHalf.LOWER ? Direction.UP : Direction.DOWN;
+		BlockPos otherPos = pos.offset(otherDirection);
+		if (!world.getBlockState(otherPos).isOf(this)) return;
+
+		world.breakBlock(pos.offset(otherDirection), true, player);
 	}
 
 	@Override

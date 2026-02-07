@@ -65,7 +65,7 @@ public class DropBoxBlock extends BlockWithEntity {
 		if (!(world.getBlockEntity(pos) instanceof DropBoxEntity dropBox)) return ActionResult.PASS;
 
 		ActionResult result;
-		if (!player.isSneaking() && player.getMainHandStack().isEmpty()) {
+		if (!player.isSneaking()) {
 			result = dropBox.depositItems(player, null);
 			if (result.isAccepted()) {
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), WordstonesSoundEvents.DROP_BOX_DEPOSIT, SoundCategory.PLAYERS, 1, 1);
