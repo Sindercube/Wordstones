@@ -119,22 +119,38 @@ public abstract class AbstractWordstoneBlock extends BlockWithEntity {
 
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		if (!world.isClient) {
-			if (player.isCreative()) {
-				DoubleBlockHalf half = state.get(HALF);
-				if (half == DoubleBlockHalf.UPPER) {
-					BlockPos belowPos = pos.down();
-					BlockState belowState = world.getBlockState(belowPos);
-					if (belowState.isOf(state.getBlock()) && belowState.get(HALF) == DoubleBlockHalf.LOWER) {
-						BlockState blockState2 = belowState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
-						world.setBlockState(belowPos, blockState2, 35);
-						world.syncWorldEvent(player, 2001, belowPos, Block.getRawIdFromState(belowState));
-					}
+		if (world.isClient) return super.onBreak(world, pos, state, player);
+
+		if (state.get(HALF) == DoubleBlockHalf.UPPER) {
+			BlockPos belowPos = pos.down();
+			BlockState belowState = world.getBlockState(belowPos);
+			if (belowState.isOf(state.getBlock())) {
+				if (belowState.get(HALF) == DoubleBlockHalf.LOWER) {
+					BlockState blockState2 = belowState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
+					world.setBlockState(belowPos, blockState2, 35);
+					world.syncWorldEvent(player, 2001, belowPos, Block.getRawIdFromState(belowState));
 				}
-			} else {
-				dropStacks(state, world, pos, null, player, player.getMainHandStack());
+				WordstoneEntity entity = (WordstoneEntity) world.getBlockEntity(belowPos);
+				if (entity != null) entity.onBroken();
 			}
 		}
+
+//		if (!world.isClient) {
+//			if (player.isCreative()) {
+//				DoubleBlockHalf half = state.get(HALF);
+//				if (half == DoubleBlockHalf.UPPER) {
+//					BlockPos belowPos = pos.down();
+//					BlockState belowState = world.getBlockState(belowPos);
+//					if (belowState.isOf(state.getBlock()) && belowState.get(HALF) == DoubleBlockHalf.LOWER) {
+//						BlockState blockState2 = belowState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
+//						world.setBlockState(belowPos, blockState2, 35);
+//						world.syncWorldEvent(player, 2001, belowPos, Block.getRawIdFromState(belowState));
+//					}
+//				}
+//			} else {
+//				dropStacks(state, world, pos, null, player, player.getMainHandStack());
+//			}
+//		}
 
 		return super.onBreak(world, pos, state, player);
 	}

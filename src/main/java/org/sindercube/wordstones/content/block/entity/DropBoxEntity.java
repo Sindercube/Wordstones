@@ -5,15 +5,15 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 import org.sindercube.wordstones.registry.WordstonesBlockEntityTypes;
 
 import java.util.HashMap;
@@ -60,58 +60,65 @@ public class DropBoxEntity extends BlockEntity {
 		return this.inventories.containsKey(player.getUuid());
 	}
 
-	public ActionResult depositItems(PlayerEntity player) {
-		UUID uuid = player.getUuid();
-		if (this.inventories.containsKey(uuid)) {
-			player.sendMessage(Text.translatable("block.wordstones.drop_box.inventory_exists"), true);
-			return ActionResult.FAIL;
-		}
-
-		DropBoxInventory newInventory = DropBoxInventory.copyFromPlayer(player);
-		if (newInventory.isEmpty()) return ActionResult.FAIL;
-
-		this.inventories.put(uuid, newInventory);
-		unequipPlayer(player);
-
-		markDirty();
-		return ActionResult.SUCCESS;
+	public void putInventoryForPlayer(PlayerEntity player, DropBoxInventory inventory) {
+		this.inventories.put(player.getUuid(), inventory);
 	}
 
-	public static void unequipPlayer(PlayerEntity player) {
-		for (int slot = 0; slot < player.getInventory().size(); slot++) {
-			ItemStack stack = player.getInventory().getStack(slot);
-			if (!EnchantmentHelper.hasAnyEnchantmentsWith(stack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE))
-				player.getInventory().setStack(slot, ItemStack.EMPTY);
-		}
+	@Nullable
+	public DropBoxInventory popInventoryForPlayer(PlayerEntity player) {
+		return this.inventories.remove(player.getUuid());
+	}
+
+	public ActionResult depositItems(PlayerEntity player, @Nullable TagKey<Item> excluded) {
+		if (this.hasInventoryForPlayer(player)) return ActionResult.FAIL;
+
+		DropBoxInventory newInventory = DropBoxInventory.copyFromPlayer(player, excluded);
+		if (newInventory.isEmpty()) return ActionResult.FAIL;
+
+		this.putInventoryForPlayer(player, newInventory);
+		this.unequipPlayer(player, excluded);
+		this.markDirty();
+
+		return ActionResult.SUCCESS;
 	}
 
 	public ActionResult retrieveItems(PlayerEntity player) {
-		UUID uuid = player.getUuid();
-		if (!this.inventories.containsKey(uuid)) {
-			player.sendMessage(Text.translatable("block.wordstones.drop_box.inventory_not_exists"), true);
-			return ActionResult.FAIL;
-		}
+		if (!this.hasInventoryForPlayer(player)) return ActionResult.FAIL;
 
-		DropBoxInventory inventory = this.inventories.get(uuid);
-		equipPlayer(inventory, player);
-		this.inventories.remove(uuid);
+		DropBoxInventory inventory = this.popInventoryForPlayer(player);
+		if (inventory == null || inventory.isEmpty()) return ActionResult.FAIL;
 
-		markDirty();
+		this.equipPlayer(inventory, player);
+		this.markDirty();
+
 		return ActionResult.SUCCESS;
 	}
 
-	public static void equipPlayer(DropBoxInventory inventory, PlayerEntity player) {
+	public void unequipPlayer(PlayerEntity player, @Nullable TagKey<Item> excluded) {
+		for (int slot = 0; slot < player.getInventory().size(); slot++) {
+			ItemStack stack = player.getInventory().getStack(slot);
+
+			if (excluded != null && stack.isIn(excluded)) {
+				continue;
+			}
+			if (EnchantmentHelper.hasAnyEnchantmentsWith(stack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE)) {
+				continue;
+			}
+
+			player.getInventory().setStack(slot, ItemStack.EMPTY);
+		}
+	}
+
+	public void equipPlayer(DropBoxInventory inventory, PlayerEntity player) {
 		for (int slot = 0; slot < inventory.size(); slot++) {
 			ItemStack stack = inventory.getStack(slot);
 			if (player.getInventory().getStack(slot).isEmpty()) {
-//				player.getInventory().offerOrDrop(stack);
 				player.getInventory().setStack(slot, stack);
-				if (player instanceof ServerPlayerEntity serverPlayer)
-					serverPlayer.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(-2, 0, slot, stack));
 			} else {
 				player.getInventory().offerOrDrop(stack);
 			}
 		}
+		player.currentScreenHandler.sendContentUpdates();
 	}
 
 }

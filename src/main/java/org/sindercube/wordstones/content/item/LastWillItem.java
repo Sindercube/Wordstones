@@ -37,7 +37,7 @@ public class LastWillItem extends LocationBindingItem {
 		return null;
 	}
 
-	public static void beforeDeath(PlayerEntity player, DamageSource source) {
+	public static void beforeDeath(PlayerEntity player, DamageSource s) {
 		MinecraftServer server = player.getServer();
 		if (server == null) return;
 
@@ -52,7 +52,7 @@ public class LastWillItem extends LocationBindingItem {
 
 		if (world.getBlockEntity(location.pos()) instanceof DropBoxEntity dropBox) {
 			stack.decrement(1);
-			dropBox.depositItems(player);
+			dropBox.depositItems(player, null);
 		}
 	}
 

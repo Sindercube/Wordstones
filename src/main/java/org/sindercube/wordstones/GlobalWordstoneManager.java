@@ -2,7 +2,6 @@ package org.sindercube.wordstones;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Dismounting;
@@ -29,7 +28,6 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.sindercube.wordstones.content.Word;
 import org.sindercube.wordstones.content.block.WordstoneBlock;
-import org.sindercube.wordstones.content.block.entity.DropBoxEntity;
 import org.sindercube.wordstones.registry.WordstonesSoundEvents;
 import org.sindercube.wordstones.registry.WordstonesTags;
 import org.sindercube.wordstones.util.Location;
@@ -43,7 +41,7 @@ public class GlobalWordstoneManager extends PersistentState {
 
 	public static GlobalWordstoneManager get(ServerWorld world) {
 		return world.getServer().getOverworld().getPersistentStateManager().getOrCreate(
-			GlobalWordstoneManager.getPersistentStateType(), "wordstones:global_wordstones"
+			GlobalWordstoneManager.getPersistentStateType(), "global_wordstones"
 		);
 	}
 
@@ -61,18 +59,42 @@ public class GlobalWordstoneManager extends PersistentState {
 		this.data = new HashMap<>();
 	}
 
-	public static boolean teleportToWordstone(ServerWorld serverWorld, PlayerEntity player, Word word) {
-		Location location = get(serverWorld).getData().getOrDefault(word, Location.ZERO);
-		if (location.isZero()) return false;
-		return teleportToLocation(player, location);
+	@Override
+	public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+		return (NbtCompound) CODEC.encodeStart(NbtOps.INSTANCE, this.data).getOrThrow();
 	}
 
-	public static boolean teleportToLocation(PlayerEntity player, Location location) {
+	public static GlobalWordstoneManager fromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+		GlobalWordstoneManager manager = new GlobalWordstoneManager();
+		manager.data.putAll(CODEC.parse(NbtOps.INSTANCE, nbt).getOrThrow());
+		return manager;
+	}
+
+	public Map<Word, Location> getData() {
+		return this.data;
+	}
+
+	public void set(Word word, Location location) {
+		this.data.put(word, location);
+		this.markDirty();
+	}
+
+	public void remove(Word word) {
+		this.data.remove(word);
+		this.markDirty();
+	}
+
+	public static void teleportToWordstone(ServerWorld serverWorld, PlayerEntity player, Word word) {
+		Location location = get(serverWorld).getData().getOrDefault(word, Location.ZERO);
+		if (location.isZero()) return;
+		teleportToLocation(player, location);
+	}
+
+	public static void teleportToLocation(PlayerEntity player, Location location) {
 		MinecraftServer server = player.getServer();
-		if (server == null) return false;
+		if (server == null) return;
 
 		World world = location.getDimension(server);
-		dropItems(world, location.pos(), player);
 
 		BlockPos pos = location.pos();
 		BlockState state = world.getBlockState(pos);
@@ -82,10 +104,10 @@ public class GlobalWordstoneManager extends PersistentState {
 //		player.setYaw(direction.asRotation());
 
 //		Vec3d vec = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-		Vec3d vec = findTeleportPosition(player.getType(), world, pos, direction, true);
+		Vec3d vec = findTeleportPosition(player.getType(), world, pos, true);
 		if (vec == null) {
 			player.sendMessage(Text.translatable("message.wordstones.invalid_teleport"), true);
-			return false;
+			return;
 		}
 
 		if (player.hasVehicle()) player.stopRiding();
@@ -105,12 +127,11 @@ public class GlobalWordstoneManager extends PersistentState {
 			SoundCategory.PLAYERS,
 			1, 1
 		);
-		return true;
 	}
 
 	@Nullable
-	public static Vec3d findTeleportPosition(EntityType<?> entityType, CollisionView world, BlockPos pos, Direction direction, boolean ignoreInvalidPos) {
-		Iterable<BlockPos.Mutable> positions = BlockPos.iterateInSquare(pos, 1, direction, direction.getOpposite());
+	public static Vec3d findTeleportPosition(EntityType<?> entityType, CollisionView world, BlockPos pos, boolean ignoreInvalidPos) {
+		Iterable<BlockPos.Mutable> positions = BlockPos.iterateInSquare(pos, 1, Direction.EAST, Direction.SOUTH);
 		for (BlockPos.Mutable mutable : positions) {
 			Vec3d position = tryFindTeleportPosition(entityType, world, mutable, ignoreInvalidPos);
 			if (position == null) continue;
@@ -140,55 +161,22 @@ public class GlobalWordstoneManager extends PersistentState {
 		return null;
 	}
 
-	public static void dropItems(World world, BlockPos pos, PlayerEntity player) {
+	public static void dropItems(PlayerEntity player) {
 		if (player.isCreative()) return;
-
-		for (Direction direction : Direction.Type.HORIZONTAL) {
-			BlockEntity entity = world.getBlockEntity(pos.offset(direction));
-			if (entity instanceof DropBoxEntity dropBox && !dropBox.hasInventoryForPlayer(player)) {
-				dropBox.depositItems(player);
-				return;
-			}
-		}
-
 		if (player.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) return;
 
 		for (int i = 0; i < player.getInventory().size(); ++i) {
 			ItemStack stack = player.getInventory().getStack(i);
-			if (stack.isEmpty()) continue;
 			if (EnchantmentHelper.hasAnyEnchantmentsWith(stack, EnchantmentEffectComponentTypes.PREVENT_EQUIPMENT_DROP)) {
 				player.getInventory().removeStack(i);
 				continue;
 			}
-			if (stack.isIn(WordstonesTags.KEPT_ACROSS_TELEPORTATION)) continue;
+			if (stack.isIn(WordstonesTags.KEPT_ACROSS_TELEPORTATION)) {
+				continue;
+			}
 			player.dropItem(stack, true, true);
 			player.getInventory().removeStack(i);
 		}
-	}
-
-	public Map<Word, Location> getData() {
-		return this.data;
-	}
-
-	public void set(Word word, Location location) {
-		this.data.put(word, location);
-		this.markDirty();
-	}
-
-	public void remove(Word word) {
-		this.data.remove(word);
-		this.markDirty();
-	}
-
-	@Override
-	public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		return (NbtCompound) CODEC.encodeStart(NbtOps.INSTANCE, this.data).getOrThrow();
-	}
-
-	public static GlobalWordstoneManager fromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		GlobalWordstoneManager manager = new GlobalWordstoneManager();
-		manager.data.putAll(CODEC.parse(NbtOps.INSTANCE, nbt).getOrThrow());
-		return manager;
 	}
 
 }

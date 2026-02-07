@@ -4,10 +4,13 @@ import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.TagKey;
+import org.jetbrains.annotations.Nullable;
 
 public class DropBoxInventory extends PlayerInventory {
 
@@ -15,10 +18,13 @@ public class DropBoxInventory extends PlayerInventory {
 		super(null);
 	}
 
-	public static DropBoxInventory copyFromPlayer(PlayerEntity player) {
+	public static DropBoxInventory copyFromPlayer(PlayerEntity player, @Nullable TagKey<Item> excluded) {
 		DropBoxInventory inventory = new DropBoxInventory();
 		for (int slot = 0; slot < inventory.size(); slot++) {
 			ItemStack stack = player.getInventory().getStack(slot);
+			if (excluded != null && stack.isIn(excluded)) {
+				continue;
+			}
 			if (EnchantmentHelper.hasAnyEnchantmentsWith(stack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE)) {
 				continue;
 			}

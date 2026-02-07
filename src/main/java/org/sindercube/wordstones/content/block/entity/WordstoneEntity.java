@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import org.sindercube.wordstones.GlobalWordstoneManager;
 import org.sindercube.wordstones.content.Word;
 import org.sindercube.wordstones.registry.WordstonesBlockEntityTypes;
+import org.sindercube.wordstones.registry.WordstonesBlocks;
+import org.sindercube.wordstones.registry.WordstonesTags;
 import org.sindercube.wordstones.util.Location;
 
 public class WordstoneEntity extends BlockEntity {
@@ -55,12 +57,10 @@ public class WordstoneEntity extends BlockEntity {
 		}
 	}
 
-	@Override
-    public void markRemoved() {
-		if (this.world != null && this.world instanceof ServerWorld serverWorld && serverWorld.isChunkLoaded(new ChunkPos(this.getPos()).toLong())) {
+    public void onBroken() {
+		if (this.world instanceof ServerWorld serverWorld) {
 			GlobalWordstoneManager.get(serverWorld).remove(word);
 		}
-		super.markRemoved();
     }
 
 	public boolean isPlayerTooFar(PlayerEntity player) {
@@ -68,25 +68,33 @@ public class WordstoneEntity extends BlockEntity {
 	}
 
 	public void teleportPlayer(ServerWorld world, PlayerEntity player, Word word) {
+		for (Direction direction : Direction.Type.HORIZONTAL) {
+			BlockPos pos = this.getPos().offset(direction);
+			BlockState state = world.getBlockState(pos);
+			if (!state.isOf(WordstonesBlocks.DROP_BOX)) continue;
+
+			DropBoxEntity dropBox = (DropBoxEntity) world.getBlockEntity(pos);
+			if (dropBox == null) continue;
+
+			if (dropBox.hasInventoryForPlayer(player)) continue;
+
+			dropBox.depositItems(player, WordstonesTags.KEPT_ACROSS_TELEPORTATION);
+			break;
+		}
+		GlobalWordstoneManager.dropItems(player);
 		GlobalWordstoneManager.teleportToWordstone(world, player, word);
-//		List<BlockState> adjacentStates = Direction.Type.HORIZONTAL.stream()
-//			.map(this.pos::offset)
-//			.map(world::getBlockState)
-//			.toList();
-//		for (BlockState state : adjacentStates) {
-//
-//		}
 	}
 
-	public static void clientTick(World world, BlockPos pos, BlockState state, WordstoneEntity entity) {
+	public static void clientTick(World world, BlockPos pos, BlockState s, WordstoneEntity entity) {
 		RenderState renderState = entity.renderState;
 		renderState.pageTurningSpeed = renderState.nextPageTurningSpeed;
 		renderState.lastBookRotation = renderState.bookRotation;
-		PlayerEntity player = world.getClosestPlayer((double)pos.getX() + (double)0.5F, (double)pos.getY() + (double)0.5F, (double)pos.getZ() + (double)0.5F, 3, false);
+		Vec3d centered = Vec3d.ofCenter(pos);
+		PlayerEntity player = world.getClosestPlayer(centered.x, centered.y, centered.z, 3, false);
 		if (player != null) {
-			double d = player.getX() - ((double)pos.getX() + (double)0.5F);
-			double e = player.getZ() - ((double)pos.getZ() + (double)0.5F);
-			renderState.targetBookRotation = (float) MathHelper.atan2(e, d);
+			double x = player.getX() - centered.x;
+			double z = player.getZ() - centered.z;
+			renderState.targetBookRotation = (float) MathHelper.atan2(z, x);
 			renderState.nextPageTurningSpeed += 0.1F;
 			if (renderState.nextPageTurningSpeed < 0.5F || RANDOM.nextInt(40) == 0) {
 				float f = renderState.flipRandom;
@@ -136,7 +144,6 @@ public class WordstoneEntity extends BlockEntity {
 	}
 
 	public static class RenderState {
-
 		public int ticks;
 		public float nextPageAngle;
 		public float pageAngle;
@@ -147,7 +154,6 @@ public class WordstoneEntity extends BlockEntity {
 		public float bookRotation;
 		public float lastBookRotation;
 		public float targetBookRotation;
-
 	}
 
 }

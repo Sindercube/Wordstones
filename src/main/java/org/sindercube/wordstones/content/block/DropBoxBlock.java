@@ -12,6 +12,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
@@ -60,20 +61,25 @@ public class DropBoxBlock extends BlockWithEntity {
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+		if (world.isClient) return ActionResult.SUCCESS;
 		if (!(world.getBlockEntity(pos) instanceof DropBoxEntity dropBox)) return ActionResult.PASS;
 
 		ActionResult result;
-		if (player.isSneaking() && player.getMainHandStack().isEmpty()) {
-			result = dropBox.depositItems(player);
+		if (!player.isSneaking() && player.getMainHandStack().isEmpty()) {
+			result = dropBox.depositItems(player, null);
 			if (result.isAccepted()) {
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), WordstonesSoundEvents.DROP_BOX_DEPOSIT, SoundCategory.PLAYERS, 1, 1);
-				world.emitGameEvent(player,  GameEvent.BLOCK_ACTIVATE, pos);
+				world.emitGameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
+			} else {
+				player.sendMessage(Text.translatable("block.wordstones.drop_box.inventory_exists"), true);
 			}
 		} else {
 			result = dropBox.retrieveItems(player);
 			if (result.isAccepted()) {
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), WordstonesSoundEvents.DROP_BOX_RETRIEVE, SoundCategory.PLAYERS, 1, 1);
 				world.emitGameEvent(player, GameEvent.BLOCK_DEACTIVATE, pos);
+			} else {
+				player.sendMessage(Text.translatable("block.wordstones.drop_box.inventory_not_exists"), true);
 			}
 		}
 

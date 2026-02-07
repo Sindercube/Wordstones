@@ -84,26 +84,6 @@ public class SteleBlock extends AbstractSignBlock {
 		return type == SlabType.BOTTOM || type == SlabType.DOUBLE;
 	}
 
-//	public Direction getRotation(BlockState state) {
-//		return state.get(SteleBlock.TYPE) == SlabType.TOP
-//			? state.get(SteleBlock.TOP_FACING)
-//			: state.get(SteleBlock.BOTTOM_FACING);
-//	}
-//
-//	public SlabType getSlabType(BlockState state) {
-//		return state.get(TYPE);
-//	}
-//
-//	public boolean hasTop(BlockState state) {
-//		SlabType type = this.getSlabType(state);
-//		return type == SlabType.TOP || type == SlabType.DOUBLE;
-//	}
-//
-//	public boolean hasBottom(BlockState state) {
-//		SlabType type = this.getSlabType(state);
-//		return type == SlabType.BOTTOM || type == SlabType.DOUBLE;
-//	}
-
 	@Override
 	public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(TOP_FACING, BOTTOM_FACING, TYPE, ATTACHED, WATERLOGGED);
